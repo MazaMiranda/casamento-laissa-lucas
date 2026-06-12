@@ -52,3 +52,14 @@ create policy "recados_select_anon"
   using (true);
 
 -- RSVPs: leitura apenas via service role ou app autenticado (lista de convidados)
+drop policy if exists "rsvps_select_authenticated" on public.rsvps;
+create policy "rsvps_select_authenticated"
+  on public.rsvps for select
+  to authenticated
+  using (true);
+
+grant usage on schema public to authenticated;
+grant select on table public.rsvps to authenticated;
+
+-- Crie os usuários do casal em: Authentication → Users → Add user (e-mail + senha)
+-- Verificar policies: select policyname, roles, cmd from pg_policies where tablename = 'rsvps';

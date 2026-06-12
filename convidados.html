@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Lista de Convidados — Laíssa & Lucas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:    #5E2C34;
+      --charcoal: #4A2329;
+      --dark:     #3D2520;
+      --gold:     #B8755F;
+      --gold-lt:  #D4A088;
+      --white:    #ffffff;
+      --off:      #F2EDE6;
+      --light:    #E8E0D4;
+      --border:   #D4C8BC;
+      --muted:    #7A5D4E;
+      --success:  #3d7a5c;
+      --danger:   #9e3d3d;
+      --warn:     #9a7b2e;
+      --dark-rgb: 94, 44, 52;
+      --accent-rgb: 184, 117, 95;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--off);
+      color: var(--dark);
+      font-weight: 300;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    .hidden { display: none !important; }
+
+    /* ── Login ── */
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: linear-gradient(160deg, var(--black) 0%, var(--charcoal) 55%, var(--dark) 100%);
+    }
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--white);
+      padding: 2.5rem 2rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+    .login-brand {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.4rem;
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: .35rem;
+    }
+    .login-sub {
+      text-align: center;
+      font-size: .7rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--black);
+      color: var(--white);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .header-brand {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--gold);
+      font-size: 1.1rem;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+    .user-email {
+      font-size: .75rem;
+      color: rgba(255,255,255,.5);
+    }
+
+    /* ── Layout ── */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+    }
+
+    /* ── Stats ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 1.25rem 1rem;
+      text-align: center;
+    }
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--black);
+      line-height: 1.1;
+    }
+    .stat-label {
+      font-size: .62rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: .35rem;
+    }
+    .stat-card.accent .stat-value { color: var(--gold); }
+    .stat-card.success .stat-value { color: var(--success); }
+    .stat-card.danger .stat-value { color: var(--danger); }
+    .stat-card.warn .stat-value { color: var(--warn); }
+
+    /* ── Toolbar ── */
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      align-items: flex-end;
+      margin-bottom: 1.25rem;
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+    }
+    .field { display: flex; flex-direction: column; gap: .35rem; flex: 1; min-width: 140px; }
+    .field label {
+      font-size: .62rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .field input, .field select {
+      font-family: inherit;
+      font-size: .85rem;
+      font-weight: 400;
+      padding: .6rem .75rem;
+      border: 1px solid var(--border);
+      background: var(--off);
+      color: var(--dark);
+      outline: none;
+      transition: border-color .2s;
+    }
+    .field input:focus, .field select:focus { border-color: var(--gold); }
+
+    /* ── Buttons ── */
+    .btn {
+      font-family: inherit;
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      padding: .7rem 1.25rem;
+      border: none;
+      cursor: pointer;
+      transition: background .2s, opacity .2s;
+    }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--white);
+    }
+    .btn-primary:hover:not(:disabled) { background: var(--gold-lt); }
+    .btn-outline {
+      background: transparent;
+      color: var(--black);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }
+    .btn-ghost {
+      background: transparent;
+      color: rgba(255,255,255,.7);
+      border: 1px solid rgba(255,255,255,.25);
+    }
+    .btn-ghost:hover:not(:disabled) { color: var(--gold); border-color: var(--gold); }
+
+    /* ── Table ── */
+    .table-wrap {
+      background: var(--white);
+      border: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .82rem;
+    }
+    th {
+      text-align: left;
+      font-size: .6rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+      padding: .85rem 1rem;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    th:hover { color: var(--gold); }
+    th .sort-icon { opacity: .4; margin-left: .25rem; }
+    th.sorted .sort-icon { opacity: 1; color: var(--gold); }
+    td {
+      padding: .75rem 1rem;
+      border-bottom: 1px solid var(--light);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(var(--accent-rgb), .06); }
+    .badge {
+      display: inline-block;
+      font-size: .58rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .2rem .5rem;
+    }
+    .badge-sim { background: rgba(61,122,92,.12); color: var(--success); }
+    .badge-nao { background: rgba(158,61,61,.12); color: var(--danger); }
+    .badge-talvez { background: rgba(154,123,46,.12); color: var(--warn); }
+    .obs-cell {
+      max-width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .obs-cell[title] { cursor: help; }
+
+    /* ── States ── */
+    .empty-state, .loading-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+    .form-error {
+      background: rgba(158,61,61,.08);
+      color: var(--danger);
+      font-size: .8rem;
+      padding: .6rem .75rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .form-error.visible { display: block; }
+    .meta-bar {
+      font-size: .72rem;
+      color: var(--muted);
+      margin-bottom: .75rem;
+    }
+    .meta-bar strong { color: var(--dark); font-weight: 500; }
+
+    @media (max-width: 640px) {
+      header { padding: 1rem; }
+      main { padding: 1.25rem 1rem 2rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .toolbar .field { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="login-screen" class="login-wrap">
+  <div class="login-card">
+    <div class="login-brand">Laíssa & Lucas</div>
+    <div class="login-sub">Lista de convidados</div>
+    <div class="form-error" id="login-error"></div>
+    <form id="login-form">
+      <div class="field" style="margin-bottom:1rem">
+        <label for="login-email">E-mail</label>
+        <input type="email" id="login-email" required autocomplete="email" />
+      </div>
+      <div class="field" style="margin-bottom:1.5rem">
+        <label for="login-password">Senha</label>
+        <input type="password" id="login-password" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn btn-primary" id="login-submit" style="width:100%">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="app-screen" class="hidden">
+  <header>
+    <div class="header-brand">Chá de Casa Nova — Convidados</div>
+    <div class="header-actions">
+      <span class="user-email" id="user-email"></span>
+      <button type="button" class="btn btn-ghost" id="btn-logout">Sair</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card accent">
+        <div class="stat-value" id="stat-total">—</div>
+        <div class="stat-label">Respostas</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-value" id="stat-sim">—</div>
+        <div class="stat-label">Confirmados</div>
+      </div>
+      <div class="stat-card danger">
+        <div class="stat-value" id="stat-nao">—</div>
+        <div class="stat-label">Não vão</div>
+      </div>
+      <div class="stat-card warn">
+        <div class="stat-value" id="stat-talvez">—</div>
+        <div class="stat-label">Talvez</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-adultos">—</div>
+        <div class="stat-label">Adultos (sim)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-criancas">—</div>
+        <div class="stat-label">Crianças (sim)</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="stat-value" id="stat-pessoas">—</div>
+        <div class="stat-label">Total pessoas (sim)</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="field" style="flex:2;min-width:200px">
+        <label for="filter-search">Buscar</label>
+        <input type="search" id="filter-search" placeholder="Nome, e-mail ou telefone…" />
+      </div>
+      <div class="field">
+        <label for="filter-presenca">Presença</label>
+        <select id="filter-presenca">
+          <option value="">Todas</option>
+          <option value="sim">Confirmados</option>
+          <option value="nao">Não vão</option>
+          <option value="talvez">Talvez</option>
+        </select>
+      </div>
+      <button type="button" class="btn btn-outline" id="btn-refresh">Atualizar</button>
+      <button type="button" class="btn btn-primary" id="btn-export">Exportar CSV</button>
+    </div>
+
+    <div class="meta-bar" id="meta-bar"></div>
+
+    <div class="table-wrap">
+      <div class="loading-state hidden" id="table-loading">Carregando confirmações…</div>
+      <div class="empty-state hidden" id="table-empty">Nenhuma confirmação encontrada.</div>
+      <table id="rsvp-table" class="hidden">
+        <thead>
+          <tr>
+            <th data-sort="created_at">Data <span class="sort-icon">↕</span></th>
+            <th data-sort="nome">Nome <span class="sort-icon">↕</span></th>
+            <th data-sort="email">E-mail <span class="sort-icon">↕</span></th>
+            <th data-sort="telefone">Telefone <span class="sort-icon">↕</span></th>
+            <th data-sort="presenca">Presença <span class="sort-icon">↕</span></th>
+            <th data-sort="adultos">Adultos <span class="sort-icon">↕</span></th>
+            <th data-sort="criancas">Crianças <span class="sort-icon">↕</span></th>
+            <th>Observações</th>
+          </tr>
+        </thead>
+        <tbody id="rsvp-tbody"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  var SUPABASE_URL = 'https://ysgxlwxwjwtcpyevkvcs.supabase.co';
+  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzZ3hsd3h3and0Y3B5ZXZrdmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyOTI5NzQsImV4cCI6MjA5Njg2ODk3NH0.UU3i0yY8Ala8K184Vt2GX5dbL6ugKiiND0MplscTznY';
+
+  var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  var allRsvps = [];
+  var sortKey = 'created_at';
+  var sortDir = 'desc';
+
+  var loginScreen = document.getElementById('login-screen');
+  var appScreen   = document.getElementById('app-screen');
+  var loginForm   = document.getElementById('login-form');
+  var loginError  = document.getElementById('login-error');
+  var loginSubmit = document.getElementById('login-submit');
+
+  function showLogin() {
+    loginScreen.classList.remove('hidden');
+    appScreen.classList.add('hidden');
+  }
+
+  function showApp(email) {
+    loginScreen.classList.add('hidden');
+    appScreen.classList.remove('hidden');
+    document.getElementById('user-email').textContent = email || '';
+  }
+
+  function showLoginError(msg) {
+    loginError.textContent = msg;
+    loginError.classList.add('visible');
+  }
+
+  function clearLoginError() {
+    loginError.textContent = '';
+    loginError.classList.remove('visible');
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '—';
+    var d = new Date(iso);
+    return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
+      ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function presencaLabel(v) {
+    if (v === 'sim') return 'Confirmado';
+    if (v === 'nao') return 'Não vai';
+    if (v === 'talvez') return 'Talvez';
+    return v;
+  }
+
+  function presencaBadge(v) {
+    return '<span class="badge badge-' + v + '">' + presencaLabel(v) + '</span>';
+  }
+
+  function getFilteredRsvps() {
+    var search = document.getElementById('filter-search').value.trim().toLowerCase();
+    var presenca = document.getElementById('filter-presenca').value;
+
+    return allRsvps.filter(function (r) {
+      if (presenca && r.presenca !== presenca) return false;
+      if (!search) return true;
+      var hay = [r.nome, r.email, r.telefone, r.observacoes].join(' ').toLowerCase();
+      return hay.indexOf(search) !== -1;
+    });
+  }
+
+  function sortRsvps(list) {
+    var key = sortKey;
+    var dir = sortDir === 'asc' ? 1 : -1;
+    return list.slice().sort(function (a, b) {
+      var va = a[key];
+      var vb = b[key];
+      if (key === 'created_at') {
+        va = new Date(va).getTime();
+        vb = new Date(vb).getTime();
+      } else if (key === 'adultos' || key === 'criancas') {
+        va = Number(va) || 0;
+        vb = Number(vb) || 0;
+      } else {
+        va = (va || '').toString().toLowerCase();
+        vb = (vb || '').toString().toLowerCase();
+      }
+      if (va < vb) return -1 * dir;
+      if (va > vb) return 1 * dir;
+      return 0;
+    });
+  }
+
+  function updateStats() {
+    var sim = allRsvps.filter(function (r) { return r.presenca === 'sim'; });
+    var adultos = sim.reduce(function (s, r) { return s + (Number(r.adultos) || 0); }, 0);
+    var criancas = sim.reduce(function (s, r) { return s + (Number(r.criancas) || 0); }, 0);
+
+    document.getElementById('stat-total').textContent = allRsvps.length;
+    document.getElementById('stat-sim').textContent = sim.length;
+    document.getElementById('stat-nao').textContent = allRsvps.filter(function (r) { return r.presenca === 'nao'; }).length;
+    document.getElementById('stat-talvez').textContent = allRsvps.filter(function (r) { return r.presenca === 'talvez'; }).length;
+    document.getElementById('stat-adultos').textContent = adultos;
+    document.getElementById('stat-criancas').textContent = criancas;
+    document.getElementById('stat-pessoas').textContent = adultos + criancas;
+  }
+
+  function renderTable() {
+    var filtered = sortRsvps(getFilteredRsvps());
+    var tbody = document.getElementById('rsvp-tbody');
+    var table = document.getElementById('rsvp-table');
+    var empty = document.getElementById('table-empty');
+    var meta  = document.getElementById('meta-bar');
+
+    meta.innerHTML = 'Exibindo <strong>' + filtered.length + '</strong> de <strong>' + allRsvps.length + '</strong> confirmações';
+
+    if (!filtered.length) {
+      table.classList.add('hidden');
+      empty.classList.remove('hidden');
+      tbody.innerHTML = '';
+      return;
+    }
+
+    empty.classList.add('hidden');
+    table.classList.remove('hidden');
+
+    tbody.innerHTML = filtered.map(function (r) {
+      var obs = r.observacoes || '';
+      return '<tr>' +
+        '<td>' + formatDate(r.created_at) + '</td>' +
+        '<td>' + escapeHtml(r.nome) + '</td>' +
+        '<td>' + escapeHtml(r.email) + '</td>' +
+        '<td>' + escapeHtml(r.telefone || '—') + '</td>' +
+        '<td>' + presencaBadge(r.presenca) + '</td>' +
+        '<td>' + (r.adultos != null ? r.adultos : '—') + '</td>' +
+        '<td>' + (r.criancas != null ? r.criancas : '—') + '</td>' +
+        '<td class="obs-cell"' + (obs ? ' title="' + escapeAttr(obs) + '"' : '') + '>' + (obs ? escapeHtml(obs) : '—') + '</td>' +
+        '</tr>';
+    }).join('');
+
+    document.querySelectorAll('#rsvp-table th').forEach(function (th) {
+      th.classList.toggle('sorted', th.dataset.sort === sortKey);
+      var icon = th.querySelector('.sort-icon');
+      if (th.dataset.sort === sortKey) {
+        icon.textContent = sortDir === 'asc' ? '↑' : '↓';
+      } else {
+        icon.textContent = '↕';
+      }
+    });
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function escapeAttr(str) {
+    return escapeHtml(str).replace(/'/g, '&#39;');
+  }
+
+  function setLoading(loading) {
+    document.getElementById('table-loading').classList.toggle('hidden', !loading);
+    if (loading) {
+      document.getElementById('rsvp-table').classList.add('hidden');
+      document.getElementById('table-empty').classList.add('hidden');
+    }
+  }
+
+  async function loadRsvps() {
+    setLoading(true);
+    var btnRefresh = document.getElementById('btn-refresh');
+    btnRefresh.disabled = true;
+
+    var result = await supabase
+      .from('rsvps')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    btnRefresh.disabled = false;
+    setLoading(false);
+
+    if (result.error) {
+      var msg = result.error.message || 'Erro ao carregar dados.';
+      if (result.error.code === 'PGRST301' || msg.indexOf('permission') !== -1) {
+        msg = 'Sem permissão para ler RSVPs. Execute a política rsvps_select_authenticated no Supabase.';
+      }
+      alert(msg);
+      return;
+    }
+
+    allRsvps = result.data || [];
+    updateStats();
+    renderTable();
+  }
+
+  function exportCsv() {
+    var rows = sortRsvps(getFilteredRsvps());
+    if (!rows.length) {
+      alert('Nenhum registro para exportar com os filtros atuais.');
+      return;
+    }
+
+    var headers = ['Data', 'Nome', 'E-mail', 'Telefone', 'Presença', 'Adultos', 'Crianças', 'Observações'];
+    var lines = [headers.join(';')];
+
+    rows.forEach(function (r) {
+      lines.push([
+        formatDate(r.created_at),
+        r.nome,
+        r.email,
+        r.telefone || '',
+        presencaLabel(r.presenca),
+        r.adultos,
+        r.criancas,
+        (r.observacoes || '').replace(/\r?\n/g, ' ')
+      ].map(csvCell).join(';'));
+    });
+
+    var bom = '\uFEFF';
+    var blob = new Blob([bom + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'convidados-cha-casa-nova-' + new Date().toISOString().slice(0, 10) + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function csvCell(val) {
+    var s = String(val == null ? '' : val);
+    if (/[;"\r\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+
+  /* ── Auth ── */
+  loginForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    clearLoginError();
+    loginSubmit.disabled = true;
+    loginSubmit.textContent = 'Entrando…';
+
+    var email = document.getElementById('login-email').value.trim();
+    var password = document.getElementById('login-password').value;
+
+    var result = await supabase.auth.signInWithPassword({ email: email, password: password });
+
+    loginSubmit.disabled = false;
+    loginSubmit.textContent = 'Entrar';
+
+    if (result.error) {
+      showLoginError(result.error.message === 'Invalid login credentials'
+        ? 'E-mail ou senha incorretos.'
+        : result.error.message);
+      return;
+    }
+
+    showApp(result.data.user.email);
+    await loadRsvps();
+  });
+
+  document.getElementById('btn-logout').addEventListener('click', async function () {
+    await supabase.auth.signOut();
+    allRsvps = [];
+    showLogin();
+    loginForm.reset();
+  });
+
+  document.getElementById('btn-refresh').addEventListener('click', loadRsvps);
+  document.getElementById('btn-export').addEventListener('click', exportCsv);
+
+  document.getElementById('filter-search').addEventListener('input', renderTable);
+  document.getElementById('filter-presenca').addEventListener('change', renderTable);
+
+  document.querySelectorAll('#rsvp-table th[data-sort]').forEach(function (th) {
+    th.addEventListener('click', function () {
+      var key = th.dataset.sort;
+      if (sortKey === key) {
+        sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+      } else {
+        sortKey = key;
+        sortDir = key === 'created_at' ? 'desc' : 'asc';
+      }
+      renderTable();
+    });
+  });
+
+  supabase.auth.getSession().then(function (res) {
+    var session = res.data.session;
+    if (session) {
+      showApp(session.user.email);
+      loadRsvps();
+    } else {
+      showLogin();
+    }
+  });
+
+  supabase.auth.onAuthStateChange(function (event, session) {
+    if (event === 'SIGNED_OUT') showLogin();
+    if (event === 'SIGNED_IN' && session) {
+      showApp(session.user.email);
+      loadRsvps();
+    }
+  });
+</script>
+</body>
+</html>
