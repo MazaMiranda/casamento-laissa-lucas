@@ -17,6 +17,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="dns-prefetch" href="https://formspree.io" />
   <link rel="preconnect" href="https://formspree.io" crossorigin />
+  <link rel="dns-prefetch" href="https://ysgxlwxwjwtcpyevkvcs.supabase.co" />
+  <link rel="preconnect" href="https://ysgxlwxwjwtcpyevkvcs.supabase.co" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1161,22 +1163,7 @@
       <div class="ornament-rule"><div class="ornament-rule-dot"></div></div>
     </div>
  
-    <div class="messages-grid" id="messages-list">
-      <div class="msg-card">
-        <div class="msg-avatar">M</div>
-        <div>
-          <div class="msg-name">Maria Oliveira</div>
-          <div class="msg-text">Que casal incrível! Muita felicidade para vocês dois. Esse dia vai ser absolutamente inesquecível! 🥂</div>
-        </div>
-      </div>
-      <div class="msg-card">
-        <div class="msg-avatar">P</div>
-        <div>
-          <div class="msg-name">Pedro Santos</div>
-          <div class="msg-text">Laíssa e Lucas, que a vida de vocês juntos seja repleta de amor, cumplicidade e muitas aventuras! 💛</div>
-        </div>
-      </div>
-    </div>
+    <div class="messages-grid" id="messages-list"></div>
  
     <div class="msg-form reveal" id="msg-form-wrap">
       <form id="msg-form">
@@ -1221,7 +1208,8 @@
   <p class="lightbox-caption" id="lightbox-caption"></p>
   <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Próxima foto">&#8250;</button>
 </div>
- 
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   /* ── CONFIGURAÇÃO CENTRAL — edite aqui ── */
   var SITE_CONFIG = {
@@ -1235,6 +1223,10 @@
     formspree: {
       rsvp: 'mwvjwvlo',
       recados: 'mrevoepk'
+    },
+    supabase: {
+      url: 'https://ysgxlwxwjwtcpyevkvcs.supabase.co',
+      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzZ3hsd3h3and0Y3B5ZXZrdmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyOTI5NzQsImV4cCI6MjA5Njg2ODk3NH0.UU3i0yY8Ala8K184Vt2GX5dbL6ugKiiND0MplscTznY'
     },
     event: {
       title: 'Casamento Laíssa & Lucas',
@@ -1274,6 +1266,30 @@
   };
 
   /* ── UTILITÁRIOS ── */
+  var supabaseClient = null;
+
+  function isSupabaseConfigured() {
+    return SITE_CONFIG.supabase &&
+      SITE_CONFIG.supabase.url &&
+      SITE_CONFIG.supabase.anonKey &&
+      SITE_CONFIG.supabase.url.indexOf('supabase.co') !== -1;
+  }
+
+  if (isSupabaseConfigured() && window.supabase) {
+    supabaseClient = window.supabase.createClient(
+      SITE_CONFIG.supabase.url,
+      SITE_CONFIG.supabase.anonKey
+    );
+  }
+
+  function getSupabaseErrorMessage(error) {
+    if (!error) return 'Não foi possível enviar. Tente novamente.';
+    if (error.code === 'PGRST205') {
+      return 'Tabelas não encontradas. Execute supabase/schema.sql no painel do Supabase.';
+    }
+    return error.message || 'Não foi possível enviar. Tente novamente.';
+  }
+
   function isFormspreeConfigured(formId) {
     return formId && formId.indexOf('SEU_FORM') === -1 && formId.length > 5;
   }
@@ -1648,21 +1664,58 @@
         email: document.getElementById('rsvp-email').value.trim(),
         telefone: document.getElementById('rsvp-telefone').value.trim(),
         presenca: presenca,
-        adultos: document.getElementById('rsvp-adultos').value,
-        criancas: document.getElementById('rsvp-criancas').value,
-        observacoes: document.getElementById('rsvp-obs').value.trim(),
-        _subject: 'RSVP — ' + document.getElementById('rsvp-nome').value.trim(),
-        _replyto: document.getElementById('rsvp-email').value.trim()
+        adultos: parseInt(document.getElementById('rsvp-adultos').value, 10) || 1,
+        criancas: parseInt(document.getElementById('rsvp-criancas').value, 10) || 0,
+        observacoes: document.getElementById('rsvp-obs').value.trim()
       };
+
+      rsvpSubmit.disabled = true;
+      rsvpSubmit.textContent = 'Enviando…';
+      var rsvpHint = document.getElementById('rsvp-hint');
+
+      function onRsvpFail(message) {
+        if (rsvpError) {
+          rsvpError.textContent = message;
+          rsvpError.classList.add('visible');
+        }
+        rsvpSubmit.disabled = false;
+        rsvpSubmit.textContent = 'Confirmar presença';
+        if (rsvpHint) rsvpHint.classList.remove('visible');
+      }
+
+      if (supabaseClient) {
+        if (rsvpHint) {
+          setTimeout(function() {
+            rsvpHint.textContent = 'Salvando confirmação…';
+            rsvpHint.classList.add('visible');
+          }, 1500);
+        }
+        supabaseClient.from('rsvps').insert([{
+          nome: payload.nome,
+          email: payload.email,
+          telefone: payload.telefone || null,
+          presenca: payload.presenca,
+          adultos: payload.adultos,
+          criancas: payload.criancas,
+          observacoes: payload.observacoes || null
+        }]).then(function(result) {
+          if (rsvpHint) rsvpHint.classList.remove('visible');
+          if (result.error) {
+            onRsvpFail(getSupabaseErrorMessage(result.error));
+          } else {
+            showRsvpSuccess(presenca);
+          }
+        });
+        return;
+      }
 
       if (!isFormspreeConfigured(SITE_CONFIG.formspree.rsvp)) {
         showRsvpSuccess(presenca);
         return;
       }
 
-      rsvpSubmit.disabled = true;
-      rsvpSubmit.textContent = 'Enviando…';
-      var rsvpHint = document.getElementById('rsvp-hint');
+      payload._subject = 'RSVP — ' + payload.nome;
+      payload._replyto = payload.email;
 
       submitFormspreeWithFeedback(SITE_CONFIG.formspree.rsvp, payload, rsvpHint).then(function(result) {
         if (result.ok) {
@@ -1687,10 +1740,7 @@
   }
 
   /* ── RECADOS ── */
-  function prependMessageCard(name, text) {
-    var list = document.getElementById('messages-list');
-    if (!list) return;
-
+  function createMessageCard(name, text) {
     var card = document.createElement('div');
     card.className = 'msg-card';
     var avatarDiv = document.createElement('div');
@@ -1707,9 +1757,37 @@
     inner.appendChild(textDiv);
     card.appendChild(avatarDiv);
     card.appendChild(inner);
+    return card;
+  }
+
+  function prependMessageCard(name, text) {
+    var list = document.getElementById('messages-list');
+    if (!list) return;
+    var card = createMessageCard(name, text);
     list.prepend(card);
     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
+
+  function loadRecadosFromSupabase() {
+    if (!supabaseClient) return;
+    var list = document.getElementById('messages-list');
+    if (!list) return;
+
+    supabaseClient
+      .from('recados')
+      .select('nome, recado')
+      .order('created_at', { ascending: false })
+      .limit(50)
+      .then(function(result) {
+        if (result.error || !result.data) return;
+        list.innerHTML = '';
+        result.data.forEach(function(row) {
+          list.appendChild(createMessageCard(row.nome, row.recado));
+        });
+      });
+  }
+
+  loadRecadosFromSupabase();
 
   var msgForm    = document.getElementById('msg-form');
   var msgSuccess = document.getElementById('msg-success');
@@ -1736,10 +1814,8 @@
       var payload = {
         nome: name,
         email: email,
-        recado: text,
-        _subject: 'Recado — ' + name
+        recado: text
       };
-      if (email) payload._replyto = email;
 
       function onSuccess() {
         prependMessageCard(name, text);
@@ -1747,14 +1823,43 @@
         if (msgSuccess) msgSuccess.classList.add('visible');
       }
 
-      if (!isFormspreeConfigured(SITE_CONFIG.formspree.recados)) {
-        onSuccess();
-        return;
+      function onMsgFail(message) {
+        if (msgError) {
+          msgError.textContent = message;
+          msgError.classList.add('visible');
+        }
+        msgSubmit.disabled = false;
+        msgSubmit.textContent = 'Enviar recado';
+        if (msgHint) msgHint.classList.remove('visible');
       }
 
       msgSubmit.disabled = true;
       msgSubmit.textContent = 'Enviando…';
       var msgHint = document.getElementById('msg-hint');
+
+      if (supabaseClient) {
+        supabaseClient.from('recados').insert([{
+          nome: payload.nome,
+          email: payload.email || null,
+          recado: payload.recado
+        }]).then(function(result) {
+          if (msgHint) msgHint.classList.remove('visible');
+          if (result.error) {
+            onMsgFail(getSupabaseErrorMessage(result.error));
+          } else {
+            onSuccess();
+          }
+        });
+        return;
+      }
+
+      if (!isFormspreeConfigured(SITE_CONFIG.formspree.recados)) {
+        onSuccess();
+        return;
+      }
+
+      payload._subject = 'Recado — ' + name;
+      if (email) payload._replyto = email;
 
       submitFormspreeWithFeedback(SITE_CONFIG.formspree.recados, payload, msgHint).then(function(result) {
         if (result.ok) {
