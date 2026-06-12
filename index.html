@@ -2,10 +2,16 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <script>
+    (function () {
+      var t = sessionStorage.getItem('wedding-theme-demo');
+      if (t === 'argila' || t === 'latte') document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Laíssa & Lucas — Nosso Casamento</title>
   <meta name="description" content="Laíssa e Lucas se casam em 14 de junho de 2026 em São Paulo. Confirme sua presença, veja a cerimônia e acesse a lista de presentes." />
-  <meta name="theme-color" content="#0d0d0d" />
+  <meta id="theme-color-meta" name="theme-color" content="#5E2C34" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="pt_BR" />
   <meta property="og:title" content="Laíssa & Lucas — Nosso Casamento" />
@@ -15,26 +21,49 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230d0d0d'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Georgia,serif' font-size='16' fill='%23c9a84c'%3EL%26amp%3BL%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="dns-prefetch" href="https://formspree.io" />
-  <link rel="preconnect" href="https://formspree.io" crossorigin />
   <link rel="dns-prefetch" href="https://ysgxlwxwjwtcpyevkvcs.supabase.co" />
   <link rel="preconnect" href="https://ysgxlwxwjwtcpyevkvcs.supabase.co" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
  
-    :root {
-      --black:   #0d0d0d;
-      --charcoal:#1c1c1c;
-      --dark:    #2a2a2a;
-      --gold:    #c9a84c;
-      --gold-lt: #e0c47a;
-      --gold-dim:#8a6e2f;
-      --white:   #ffffff;
-      --off:     #f8f7f4;
-      --light:   #f0ece3;
-      --border:  #e0d9cc;
-      --muted:   #888077;
+    /* Paleta 1 — Argila & Burgundy (padrão) */
+    html[data-theme="argila"],
+    html:not([data-theme]) {
+      --black:    #5E2C34;
+      --charcoal: #4A2329;
+      --dark:     #3D2520;
+      --gold:     #B8755F;
+      --gold-lt:  #D4A088;
+      --gold-dim: #7A5D4E;
+      --white:    #ffffff;
+      --off:      #F2EDE6;
+      --light:    #E8E0D4;
+      --border:   #D4C8BC;
+      --muted:    #7A5D4E;
+      --on-accent:#ffffff;
+      --dark-rgb: 94, 44, 52;
+      --accent-rgb: 184, 117, 95;
+      --map-bg:   #4A2329;
+    }
+
+    /* Paleta 2 — Latte & Terracota */
+    html[data-theme="latte"] {
+      --black:    #8B4A35;
+      --charcoal: #A45D44;
+      --dark:     #5C3D2E;
+      --gold:     #B46A55;
+      --gold-lt:  #D29866;
+      --gold-dim: #A45D44;
+      --white:    #ffffff;
+      --off:      #EBDDC4;
+      --light:    #F2E8D8;
+      --border:   #D9C9AE;
+      --muted:    #8B6B55;
+      --on-accent:#ffffff;
+      --dark-rgb: 139, 74, 53;
+      --accent-rgb: 180, 106, 85;
+      --map-bg:   #964F3A;
     }
  
     html { scroll-behavior: smooth; }
@@ -50,9 +79,9 @@
     /* ─── NAV ─── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      background: rgba(13,13,13,.96);
+      background: rgba(var(--dark-rgb), .96);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(201,168,76,.25);
+      border-bottom: 1px solid rgba(var(--accent-rgb), .25);
     }
     .nav-inner {
       max-width: 1100px; margin: 0 auto;
@@ -90,7 +119,7 @@
         display: none; flex-direction: column; gap: 0;
         position: absolute; top: 100%; left: 0; right: 0;
         background: var(--black);
-        border-top: 1px solid rgba(201,168,76,.2);
+        border-top: 1px solid rgba(var(--accent-rgb), .2);
         padding: 1rem 0;
       }
       nav ul.open { display: flex; }
@@ -120,9 +149,9 @@
       position: absolute; inset: 0; z-index: 1;
       background: linear-gradient(
         to bottom,
-        rgba(13,13,13,.45) 0%,
-        rgba(13,13,13,.72) 55%,
-        rgba(13,13,13,.92) 100%
+        rgba(var(--dark-rgb), .45) 0%,
+        rgba(var(--dark-rgb), .72) 55%,
+        rgba(var(--dark-rgb), .92) 100%
       );
     }
 
@@ -135,14 +164,14 @@
     /* decorative rings */
     .hero-ring {
       position: absolute; border-radius: 50%;
-      border: 1px solid rgba(201,168,76,.15);
+      border: 1px solid rgba(var(--accent-rgb), .15);
       pointer-events: none;
       top: 50%; left: 50%; transform: translate(-50%,-50%);
       z-index: 2;
     }
     .hero-ring:nth-child(1) { width: 500px; height: 500px; }
-    .hero-ring:nth-child(2) { width: 750px; height: 750px; border-color: rgba(201,168,76,.08); }
-    .hero-ring:nth-child(3) { width: 1000px; height: 1000px; border-color: rgba(201,168,76,.04); }
+    .hero-ring:nth-child(2) { width: 750px; height: 750px; border-color: rgba(var(--accent-rgb), .08); }
+    .hero-ring:nth-child(3) { width: 1000px; height: 1000px; border-color: rgba(var(--accent-rgb), .04); }
  
     /* gold line top */
     .hero-ornament {
@@ -178,7 +207,7 @@
       display: block;
       font-family: 'Playfair Display', serif;
       font-style: italic; font-size: .45em;
-      color: rgba(201,168,76,.6);
+      color: rgba(var(--accent-rgb), .6);
       margin: .3em 0;
     }
  
@@ -187,7 +216,7 @@
       margin: 3rem auto; width: 200px;
     }
     .hero-divider::before, .hero-divider::after {
-      content: ''; flex: 1; height: 1px; background: rgba(201,168,76,.4);
+      content: ''; flex: 1; height: 1px; background: rgba(var(--accent-rgb), .4);
     }
     .hero-divider-icon { color: var(--gold); font-size: 1rem; }
  
@@ -199,11 +228,11 @@
     /* countdown */
     .countdown {
       display: flex; gap: 0; margin-top: 4rem;
-      border: 1px solid rgba(201,168,76,.25);
+      border: 1px solid rgba(var(--accent-rgb), .25);
     }
     .cd-item {
       text-align: center; padding: 1.2rem 2rem;
-      border-right: 1px solid rgba(201,168,76,.15);
+      border-right: 1px solid rgba(var(--accent-rgb), .15);
     }
     .cd-item:last-child { border-right: none; }
     .cd-num {
@@ -230,7 +259,7 @@
     }
     .scroll-line {
       width: 1px; height: 40px;
-      background: linear-gradient(to bottom, rgba(201,168,76,.5), transparent);
+      background: linear-gradient(to bottom, rgba(var(--accent-rgb), .5), transparent);
       animation: lineGrow 2s ease-in-out infinite;
     }
     @keyframes lineGrow {
@@ -334,7 +363,7 @@
       transition: background .25s, color .25s, border-color .25s;
     }
     .welcome-link:hover {
-      background: var(--gold); color: var(--black);
+      background: var(--gold); color: var(--on-accent);
       border-color: var(--gold);
     }
 
@@ -360,15 +389,15 @@
     .gallery-item:hover img { transform: scale(1.05); }
     .gallery-item::after {
       content: ''; position: absolute; inset: 0;
-      background: rgba(13,13,13,0);
+      background: rgba(var(--dark-rgb), 0);
       transition: background .3s;
     }
-    .gallery-item:hover::after { background: rgba(13,13,13,.18); }
+    .gallery-item:hover::after { background: rgba(var(--dark-rgb), .18); }
 
     /* ─── LIGHTBOX ─── */
     .lightbox {
       display: none; position: fixed; inset: 0; z-index: 500;
-      background: rgba(13,13,13,.94);
+      background: rgba(var(--dark-rgb), .94);
       align-items: center; justify-content: center;
       flex-direction: column; padding: 2rem;
     }
@@ -376,7 +405,7 @@
     .lightbox img {
       max-width: min(900px, 92vw);
       max-height: 78vh; object-fit: contain;
-      border: 1px solid rgba(201,168,76,.25);
+      border: 1px solid rgba(var(--accent-rgb), .25);
     }
     .lightbox-caption {
       margin-top: 1rem; font-size: .75rem;
@@ -391,7 +420,7 @@
     }
     .lightbox-nav {
       position: absolute; top: 50%; transform: translateY(-50%);
-      background: none; border: 1px solid rgba(201,168,76,.3);
+      background: none; border: 1px solid rgba(var(--accent-rgb), .3);
       color: var(--gold); cursor: pointer;
       width: 44px; height: 44px; font-size: 1.2rem;
     }
@@ -402,8 +431,8 @@
     .info-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1px; background: rgba(201,168,76,.15);
-      border: 1px solid rgba(201,168,76,.15);
+      gap: 1px; background: rgba(var(--accent-rgb), .15);
+      border: 1px solid rgba(var(--accent-rgb), .15);
       margin-top: 4rem;
     }
     .info-card {
@@ -468,7 +497,7 @@
     }
     .ceremony-block strong { color: var(--white); font-weight: 500; }
     .map-box {
-      background: #111; border: 1px solid rgba(201,168,76,.2);
+      background: var(--map-bg); border: 1px solid rgba(var(--accent-rgb), .2);
       height: 300px; overflow: hidden;
     }
     .map-box iframe {
@@ -490,7 +519,21 @@
       background: var(--white);
       border: 1px solid var(--border);
       display: flex; flex-direction: column;
-      transition: background .25s, border-color .25s, box-shadow .25s;
+      position: relative;
+      transition: background .25s, border-color .25s, box-shadow .25s, opacity .25s;
+    }
+    .gift-card.presenteado {
+      opacity: .82;
+    }
+    .gift-card.presenteado:hover {
+      box-shadow: none;
+    }
+    .gift-badge {
+      position: absolute; top: .75rem; right: .75rem; z-index: 1;
+      font-size: .52rem; font-weight: 600;
+      letter-spacing: .14em; text-transform: uppercase;
+      background: var(--gold); color: var(--on-accent);
+      padding: .4rem .65rem;
     }
     .gift-card:hover {
       background: var(--off);
@@ -531,7 +574,7 @@
     }
     .btn-presentear {
       display: inline-block;
-      background: var(--gold); color: var(--black);
+      background: var(--gold); color: var(--on-accent);
       text-decoration: none; padding: .65rem 1.3rem;
       font-size: .62rem; font-weight: 600;
       letter-spacing: .18em; text-transform: uppercase;
@@ -539,6 +582,15 @@
       white-space: nowrap;
     }
     .btn-presentear:hover { background: var(--dark); color: var(--gold); }
+    .btn-presentear.disabled {
+      opacity: .55; pointer-events: none;
+      background: var(--light); color: var(--muted);
+    }
+    .gift-presenteado-label {
+      font-size: .58rem; font-weight: 600;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--gold-dim); white-space: nowrap;
+    }
  
     /* ─── RSVP ─── */
     .rsvp-container {
@@ -551,7 +603,7 @@
     }
     .rsvp-info strong { color: var(--gold); font-weight: 500; }
     .rsvp-form-wrap {
-      border: 1px solid rgba(201,168,76,.2);
+      border: 1px solid rgba(var(--accent-rgb), .2);
       padding: 2.5rem;
       background: rgba(255,255,255,.03);
     }
@@ -564,7 +616,7 @@
     .form-row input, .form-row select, .form-row textarea {
       width: 100%;
       background: rgba(255,255,255,.05);
-      border: 1px solid rgba(201,168,76,.2);
+      border: 1px solid rgba(var(--accent-rgb), .2);
       color: var(--white);
       padding: .75rem 1rem;
       font-family: 'Montserrat', sans-serif;
@@ -578,7 +630,7 @@
     .form-row select option { background: var(--black); color: var(--white); }
     .form-row textarea { height: 90px; resize: vertical; }
     .btn-rsvp {
-      width: 100%; background: var(--gold); color: var(--black);
+      width: 100%; background: var(--gold); color: var(--on-accent);
       border: none; padding: 1rem;
       font-family: 'Montserrat', sans-serif;
       font-size: .65rem; font-weight: 600;
@@ -649,7 +701,7 @@
       letter-spacing: .2em; text-transform: uppercase;
       transition: background .25s, color .25s;
     }
-    .btn-msg:hover { background: var(--gold); color: var(--black); }
+    .btn-msg:hover { background: var(--gold); color: var(--on-accent); }
     .btn-msg:disabled { opacity: .55; cursor: not-allowed; }
     .msg-success {
       display: none; text-align: center; padding: 2rem 1rem;
@@ -669,32 +721,32 @@
       letter-spacing: .16em; text-transform: uppercase;
       text-decoration: none; cursor: pointer;
       padding: .7rem 1.2rem;
-      border: 1px solid rgba(201,168,76,.35);
+      border: 1px solid rgba(var(--accent-rgb), .35);
       background: transparent; color: var(--gold);
       font-family: 'Montserrat', sans-serif;
       transition: background .25s, color .25s, border-color .25s;
     }
     .btn-action:hover {
-      background: var(--gold); color: var(--black);
+      background: var(--gold); color: var(--on-accent);
       border-color: var(--gold);
     }
     .btn-action.light {
       border-color: var(--border); color: var(--gold-dim);
     }
     .btn-action.light:hover {
-      background: var(--gold); color: var(--black);
+      background: var(--gold); color: var(--on-accent);
       border-color: var(--gold);
     }
     .contact-link {
       color: var(--gold); text-decoration: none;
-      border-bottom: 1px solid rgba(201,168,76,.35);
+      border-bottom: 1px solid rgba(var(--accent-rgb), .35);
     }
     .contact-link:hover { color: var(--gold-lt); }
  
     /* ─── FOOTER ─── */
     footer {
       background: var(--black);
-      border-top: 1px solid rgba(201,168,76,.2);
+      border-top: 1px solid rgba(var(--accent-rgb), .2);
       text-align: center; padding: 5rem 2rem 3rem;
     }
     .footer-monogram {
@@ -713,7 +765,7 @@
       text-transform: uppercase; color: rgba(255,255,255,.25);
     }
     .footer-line {
-      width: 60px; height: 1px; background: rgba(201,168,76,.3);
+      width: 60px; height: 1px; background: rgba(var(--accent-rgb), .3);
       margin: 1.8rem auto;
     }
  
@@ -741,10 +793,105 @@
       .countdown { flex-wrap: wrap; }
       .cd-item { padding: 1rem 1.3rem; }
       .hero-title { font-size: clamp(3rem, 14vw, 5rem); }
+      .theme-demo { bottom: .75rem; right: .75rem; left: .75rem; max-width: none; }
+    }
+
+    /* ─── SELETOR DE PALETA (preview cliente) ─── */
+    .theme-demo {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      z-index: 250;
+      background: rgba(255,255,255,.97);
+      border: 1px solid #ddd;
+      box-shadow: 0 8px 32px rgba(0,0,0,.14);
+      padding: .9rem 1rem;
+      max-width: 260px;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .theme-demo-label {
+      font-size: .52rem;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: .65rem;
+    }
+    .theme-demo-btns {
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+    .theme-demo-btn {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      width: 100%;
+      padding: .55rem .65rem;
+      border: 1px solid #e0d9cc;
+      background: #faf8f5;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: .62rem;
+      font-weight: 500;
+      color: #444;
+      text-align: left;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .theme-demo-btn:hover { border-color: #B8755F; }
+    .theme-demo-btn.active {
+      border-color: #B8755F;
+      background: #fff;
+      box-shadow: inset 3px 0 0 #B8755F;
+    }
+    .theme-demo-btn[data-theme-set="latte"].active {
+      border-color: #B46A55;
+      box-shadow: inset 3px 0 0 #B46A55;
+    }
+    .theme-demo-swatch {
+      display: flex;
+      gap: 3px;
+      flex-shrink: 0;
+    }
+    .theme-demo-swatch i {
+      display: block;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+    }
+    .theme-demo-note {
+      font-size: .55rem;
+      color: #999;
+      margin-top: .6rem;
+      line-height: 1.45;
     }
   </style>
 </head>
 <body>
+
+<!-- Seletor de paleta (preview — remover após escolha do cliente) -->
+<div class="theme-demo" id="theme-demo" role="group" aria-label="Alternar paleta de cores">
+  <p class="theme-demo-label">Visualização — Paletas</p>
+  <div class="theme-demo-btns">
+    <button type="button" class="theme-demo-btn active" data-theme-set="argila">
+      <span class="theme-demo-swatch" aria-hidden="true">
+        <i style="background:#F2EDE6"></i>
+        <i style="background:#B8755F"></i>
+        <i style="background:#5E2C34"></i>
+      </span>
+      Argila &amp; Burgundy
+    </button>
+    <button type="button" class="theme-demo-btn" data-theme-set="latte">
+      <span class="theme-demo-swatch" aria-hidden="true">
+        <i style="background:#EBDDC4"></i>
+        <i style="background:#B46A55"></i>
+        <i style="background:#A45D44"></i>
+      </span>
+      Latte &amp; Terracota
+    </button>
+  </div>
+  <p class="theme-demo-note">Clique para alternar entre os modelos. Será removido após a escolha.</p>
+</div>
  
 <!-- NAV -->
 <nav id="main-nav">
@@ -855,7 +1002,7 @@
         <p class="body-text" style="margin-top: 1.4rem;">
           Desde então, cada amanhecer juntos foi uma confirmação de que estávamos no caminho certo. Hoje, com o coração cheio de gratidão, queremos celebrar esse amor com as pessoas que mais amamos. Que este dia marque o início de uma vida inteira de cumplicidade, aventuras e felicidade. 💛
         </p>
-        <p class="body-text" style="margin-top: 1.4rem; font-style: italic; color: #b8974a;">
+        <p class="body-text" style="margin-top: 1.4rem; font-style: italic; color: var(--gold);">
           — Laíssa &amp; Lucas
         </p>
       </div>
@@ -999,91 +1146,11 @@
       <h2 class="section-title">Presenteie com <em>carinho</em></h2>
       <div class="ornament-rule"><div class="ornament-rule-dot"></div></div>
       <p class="body-text">
-        A sua presença já é o maior presente! Mas se quiser nos dar um gift especial, cada item desta lista foi escolhido com muito carinho. Ao clicar em <strong style="color:var(--dark)">Presentear</strong> você será direcionado ao PagSeguro para um pagamento 100% seguro.
+        A sua presença já é o maior presente! Mas se quiser nos dar um gift especial, cada item desta lista foi escolhido com muito carinho. Ao clicar em <strong style="color:var(--dark)">Presentear</strong> você será direcionado ao PagSeguro para um pagamento 100% seguro. Itens já presenteados aparecem marcados na lista.
       </p>
     </div>
- 
-    <div class="gifts-grid">
- 
-      <!-- ITEM 1 -->
-      <div class="gift-card reveal">
-        <div class="gift-icon">🍳</div>
-        <div class="gift-body">
-          <div class="gift-name">Panela Le Creuset 26cm</div>
-          <p class="gift-desc">Caçarola de ferro fundido esmaltado. Para os jantares especiais que vamos preparar juntos em nossa nova casa.</p>
-        </div>
-        <div class="gift-footer">
-          <div class="gift-price"><small>Valor</small>R$ 890</div>
-          <a class="btn-presentear" data-gift-link="0" href="#" target="_blank" rel="noopener">♦ Presentear</a>
-        </div>
-      </div>
- 
-      <!-- ITEM 2 -->
-      <div class="gift-card reveal reveal-delay-1">
-        <div class="gift-icon">☕</div>
-        <div class="gift-body">
-          <div class="gift-name">Cafeteira Nespresso Vertuo</div>
-          <p class="gift-desc">Máquina com Aeroccino para espumar leite. Nossas manhãs a dois ficam ainda mais especiais com um bom café.</p>
-        </div>
-        <div class="gift-footer">
-          <div class="gift-price"><small>Valor</small>R$ 650</div>
-          <a class="btn-presentear" data-gift-link="1" href="#" target="_blank" rel="noopener">♦ Presentear</a>
-        </div>
-      </div>
- 
-      <!-- ITEM 3 -->
-      <div class="gift-card reveal reveal-delay-2">
-        <div class="gift-icon">🛏️</div>
-        <div class="gift-body">
-          <div class="gift-name">Jogo de Cama King 400 Fios</div>
-          <p class="gift-desc">Linha Egito em 100% algodão egípcio. O conforto e o luxo que um novo lar merece desde o primeiro dia.</p>
-        </div>
-        <div class="gift-footer">
-          <div class="gift-price"><small>Valor</small>R$ 480</div>
-          <a class="btn-presentear" data-gift-link="2" href="#" target="_blank" rel="noopener">♦ Presentear</a>
-        </div>
-      </div>
- 
-      <!-- ITEM 4 -->
-      <div class="gift-card reveal">
-        <div class="gift-icon">🍷</div>
-        <div class="gift-body">
-          <div class="gift-name">Adega Climatizada 12 garrafas</div>
-          <p class="gift-desc">Controle de temperatura e umidade para guardar com cuidado os vinhos que vamos apreciar nos momentos especiais.</p>
-        </div>
-        <div class="gift-footer">
-          <div class="gift-price"><small>Valor</small>R$ 1.200</div>
-          <a class="btn-presentear" data-gift-link="3" href="#" target="_blank" rel="noopener">♦ Presentear</a>
-        </div>
-      </div>
- 
-      <!-- ITEM 5 -->
-      <div class="gift-card reveal reveal-delay-1">
-        <div class="gift-icon">🪴</div>
-        <div class="gift-body">
-          <div class="gift-name">Jogo de Vasos Decorativos</div>
-          <p class="gift-desc">Conjunto premium em cerâmica artesanal para trazer vida e elegância aos ambientes do nosso lar.</p>
-        </div>
-        <div class="gift-footer">
-          <div class="gift-price"><small>Valor</small>R$ 320</div>
-          <a class="btn-presentear" data-gift-link="4" href="#" target="_blank" rel="noopener">♦ Presentear</a>
-        </div>
-      </div>
- 
-      <!-- ITEM 6 – cota lua de mel -->
-      <div class="gift-card reveal reveal-delay-2">
-        <div class="gift-icon">✈️</div>
-        <div class="gift-body">
-          <div class="gift-name">Cota — Lua de Mel</div>
-          <p class="gift-desc">Contribua com qualquer valor para a nossa viagem dos sonhos. Cada cota torna essa aventura ainda mais especial.</p>
-        </div>
-        <div class="gift-footer">
-          <div class="gift-price"><small>Livre escolha</small>R$ 200+</div>
-          <a class="btn-presentear" data-gift-link="5" href="#" target="_blank" rel="noopener">♦ Presentear</a>
-        </div>
-      </div>
- 
-    </div>
+
+    <div class="gifts-grid" id="gifts-grid"></div>
   </div>
 </section>
  
@@ -1220,10 +1287,6 @@
       whatsappDisplay: '(11) 99999-9999',
       email: 'laissaelucas@email.com'
     },
-    formspree: {
-      rsvp: 'mwvjwvlo',
-      recados: 'mrevoepk'
-    },
     supabase: {
       url: 'https://ysgxlwxwjwtcpyevkvcs.supabase.co',
       anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzZ3hsd3h3and0Y3B5ZXZrdmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyOTI5NzQsImV4cCI6MjA5Njg2ODk3NH0.UU3i0yY8Ala8K184Vt2GX5dbL6ugKiiND0MplscTznY'
@@ -1239,13 +1302,62 @@
     share: {
       whatsappMessage: 'Save the date! Casamento Laíssa & Lucas — 14 de junho de 2026 em São Paulo. Veja todos os detalhes: '
     },
-    giftLinks: [
-      'https://pag.ae/SEU_LINK_1', // Panela Le Creuset
-      'https://pag.ae/SEU_LINK_2', // Cafeteira Nespresso
-      'https://pag.ae/SEU_LINK_3', // Jogo de Cama
-      'https://pag.ae/SEU_LINK_4', // Adega Climatizada
-      'https://pag.ae/SEU_LINK_5', // Vasos Decorativos
-      'https://pag.ae/SEU_LINK_6'  // Cota Lua de Mel
+    /* ── Lista de presentes — edite link e presenteado: true quando receber ── */
+    gifts: [
+      {
+        icon: '🍳',
+        name: 'Panela Le Creuset 26cm',
+        desc: 'Caçarola de ferro fundido esmaltado. Para os jantares especiais que vamos preparar juntos em nossa nova casa.',
+        priceLabel: 'Valor',
+        price: 'R$ 890',
+        link: 'https://pag.ae/SEU_LINK_1',
+        presenteado: false
+      },
+      {
+        icon: '☕',
+        name: 'Cafeteira Nespresso Vertuo',
+        desc: 'Máquina com Aeroccino para espumar leite. Nossas manhãs a dois ficam ainda mais especiais com um bom café.',
+        priceLabel: 'Valor',
+        price: 'R$ 650',
+        link: 'https://pag.ae/SEU_LINK_2',
+        presenteado: false
+      },
+      {
+        icon: '🛏️',
+        name: 'Jogo de Cama King 400 Fios',
+        desc: 'Linha Egito em 100% algodão egípcio. O conforto e o luxo que um novo lar merece desde o primeiro dia.',
+        priceLabel: 'Valor',
+        price: 'R$ 480',
+        link: 'https://pag.ae/SEU_LINK_3',
+        presenteado: false
+      },
+      {
+        icon: '🍷',
+        name: 'Adega Climatizada 12 garrafas',
+        desc: 'Controle de temperatura e umidade para guardar com cuidado os vinhos que vamos apreciar nos momentos especiais.',
+        priceLabel: 'Valor',
+        price: 'R$ 1.200',
+        link: 'https://pag.ae/SEU_LINK_4',
+        presenteado: false
+      },
+      {
+        icon: '🪴',
+        name: 'Jogo de Vasos Decorativos',
+        desc: 'Conjunto premium em cerâmica artesanal para trazer vida e elegância aos ambientes do nosso lar.',
+        priceLabel: 'Valor',
+        price: 'R$ 320',
+        link: 'https://pag.ae/SEU_LINK_5',
+        presenteado: false
+      },
+      {
+        icon: '✈️',
+        name: 'Cota — Lua de Mel',
+        desc: 'Contribua com qualquer valor para a nossa viagem dos sonhos. Cada cota torna essa aventura ainda mais especial.',
+        priceLabel: 'Livre escolha',
+        price: 'R$ 200+',
+        link: 'https://pag.ae/SEU_LINK_6',
+        presenteado: false
+      }
     ],
     /* ── Fotos temporárias (substitua pelas reais quando estiverem prontas) ── */
     photos: {
@@ -1290,54 +1402,8 @@
     return error.message || 'Não foi possível enviar. Tente novamente.';
   }
 
-  function isFormspreeConfigured(formId) {
-    return formId && formId.indexOf('SEU_FORM') === -1 && formId.length > 5;
-  }
-
-  function getFormspreeErrorMessage(result) {
-    if (!result || !result.body) {
-      return 'Não foi possível enviar. Tente novamente ou entre em contato pelo WhatsApp.';
-    }
-    var body = result.body;
-    if (body.error && body.error.indexOf('reCAPTCHA') !== -1) {
-      return 'Formulário de presença bloqueado pelo Formspree (reCAPTCHA). Desative em formspree.io → formulário RSVP → Settings → Spam Protection.';
-    }
-    if (body.error) return body.error;
-    if (body.errors && body.errors.length) return body.errors[0].message || body.errors[0].code;
-    return 'Não foi possível enviar. Tente novamente ou entre em contato pelo WhatsApp.';
-  }
-
-  function submitToFormspree(formId, data) {
-    return fetch('https://formspree.io/f/' + formId, {
-      method: 'POST',
-      keepalive: true,
-      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    }).then(function(response) {
-      return response.json().then(function(body) {
-        return { ok: response.ok, status: response.status, body: body };
-      }).catch(function() {
-        return { ok: false, status: response.status, body: null };
-      });
-    });
-  }
-
-  function submitFormspreeWithFeedback(formId, data, hintEl) {
-    var slowTimer = setTimeout(function() {
-      if (hintEl) {
-        hintEl.textContent = 'Processando… o serviço pode levar alguns segundos na primeira vez.';
-        hintEl.classList.add('visible');
-      }
-    }, 2000);
-    return submitToFormspree(formId, data).then(function(result) {
-      clearTimeout(slowTimer);
-      if (hintEl) hintEl.classList.remove('visible');
-      return result;
-    }).catch(function(err) {
-      clearTimeout(slowTimer);
-      if (hintEl) hintEl.classList.remove('visible');
-      throw err;
-    });
+  function isGiftLinkConfigured(link) {
+    return link && link.indexOf('SEU_LINK') === -1 && link.indexOf('http') === 0;
   }
 
   function pad2(n) { return String(n).padStart(2, '0'); }
@@ -1555,19 +1621,92 @@
 
   renderGallery();
 
-  /* ── LINKS DE PRESENTES ── */
-  document.querySelectorAll('[data-gift-link]').forEach(function(btn) {
-    var index = parseInt(btn.getAttribute('data-gift-link'), 10);
-    var link  = SITE_CONFIG.giftLinks[index];
-    if (link && link.indexOf('SEU_LINK') === -1) {
-      btn.href = link;
+  /* ── LISTA DE PRESENTES ── */
+  function renderGifts() {
+    var grid = document.getElementById('gifts-grid');
+    if (!grid || !SITE_CONFIG.gifts) return;
+    grid.innerHTML = '';
+
+    SITE_CONFIG.gifts.forEach(function(gift, index) {
+      var card = document.createElement('div');
+      var delayClass = index % 3 === 1 ? ' reveal-delay-1' : (index % 3 === 2 ? ' reveal-delay-2' : '');
+      card.className = 'gift-card reveal' + delayClass + (gift.presenteado ? ' presenteado' : '');
+
+      if (gift.presenteado) {
+        var badge = document.createElement('span');
+        badge.className = 'gift-badge';
+        badge.textContent = 'Presenteado';
+        card.appendChild(badge);
+      }
+
+      var icon = document.createElement('div');
+      icon.className = 'gift-icon';
+      icon.textContent = gift.icon;
+
+      var body = document.createElement('div');
+      body.className = 'gift-body';
+      var name = document.createElement('div');
+      name.className = 'gift-name';
+      name.textContent = gift.name;
+      var desc = document.createElement('p');
+      desc.className = 'gift-desc';
+      desc.textContent = gift.desc;
+      body.appendChild(name);
+      body.appendChild(desc);
+
+      var footer = document.createElement('div');
+      footer.className = 'gift-footer';
+      var price = document.createElement('div');
+      price.className = 'gift-price';
+      var priceLabel = document.createElement('small');
+      priceLabel.textContent = gift.priceLabel || 'Valor';
+      price.appendChild(priceLabel);
+      price.appendChild(document.createTextNode(gift.price));
+      footer.appendChild(price);
+
+      if (gift.presenteado) {
+        var label = document.createElement('span');
+        label.className = 'gift-presenteado-label';
+        label.textContent = '♦ Presenteado';
+        footer.appendChild(label);
+      } else if (isGiftLinkConfigured(gift.link)) {
+        var link = document.createElement('a');
+        link.className = 'btn-presentear';
+        link.href = gift.link;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.textContent = '♦ Presentear';
+        footer.appendChild(link);
+      } else {
+        var btn = document.createElement('a');
+        btn.className = 'btn-presentear disabled';
+        btn.href = '#';
+        btn.textContent = '♦ Presentear';
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          alert('Link PagSeguro ainda não configurado. Edite SITE_CONFIG.gifts[' + index + '].link no arquivo HTML.');
+        });
+        footer.appendChild(btn);
+      }
+
+      card.appendChild(icon);
+      card.appendChild(body);
+      card.appendChild(footer);
+      grid.appendChild(card);
+    });
+
+    if (revealObserver) {
+      grid.querySelectorAll('.reveal').forEach(function(el) {
+        revealObserver.observe(el);
+      });
     } else {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        alert('Link de pagamento ainda não configurado. Edite SITE_CONFIG.giftLinks no arquivo HTML.');
+      grid.querySelectorAll('.reveal').forEach(function(el) {
+        el.classList.add('visible');
       });
     }
-  });
+  }
+
+  renderGifts();
 
   var ceremonyMap = document.getElementById('ceremony-map');
   if (ceremonyMap && SITE_CONFIG.mapEmbedUrl) {
@@ -1597,7 +1736,7 @@
       if (countdownInterval) clearInterval(countdownInterval);
       var box = document.querySelector('.countdown');
       if (box) {
-        box.innerHTML = '<p style="font-family:\'Playfair Display\',serif;font-size:1.4rem;font-style:italic;color:#c9a84c;padding:1.5rem 2rem">Hoje é o nosso grande dia! ♥</p>';
+        box.innerHTML = '<p style="font-family:\'Playfair Display\',serif;font-size:1.4rem;font-style:italic;color:var(--gold);padding:1.5rem 2rem">Hoje é o nosso grande dia! ♥</p>';
       }
       return;
     }
@@ -1683,58 +1822,32 @@
         if (rsvpHint) rsvpHint.classList.remove('visible');
       }
 
-      if (supabaseClient) {
-        if (rsvpHint) {
-          setTimeout(function() {
-            rsvpHint.textContent = 'Salvando confirmação…';
-            rsvpHint.classList.add('visible');
-          }, 1500);
-        }
-        supabaseClient.from('rsvps').insert([{
-          nome: payload.nome,
-          email: payload.email,
-          telefone: payload.telefone || null,
-          presenca: payload.presenca,
-          adultos: payload.adultos,
-          criancas: payload.criancas,
-          observacoes: payload.observacoes || null
-        }]).then(function(result) {
-          if (rsvpHint) rsvpHint.classList.remove('visible');
-          if (result.error) {
-            onRsvpFail(getSupabaseErrorMessage(result.error));
-          } else {
-            showRsvpSuccess(presenca);
-          }
-        });
+      if (!supabaseClient) {
+        onRsvpFail('Serviço temporariamente indisponível. Tente novamente ou entre em contato pelo WhatsApp.');
         return;
       }
 
-      if (!isFormspreeConfigured(SITE_CONFIG.formspree.rsvp)) {
-        showRsvpSuccess(presenca);
-        return;
+      if (rsvpHint) {
+        setTimeout(function() {
+          rsvpHint.textContent = 'Salvando confirmação…';
+          rsvpHint.classList.add('visible');
+        }, 800);
       }
-
-      payload._subject = 'RSVP — ' + payload.nome;
-      payload._replyto = payload.email;
-
-      submitFormspreeWithFeedback(SITE_CONFIG.formspree.rsvp, payload, rsvpHint).then(function(result) {
-        if (result.ok) {
-          showRsvpSuccess(presenca);
+      supabaseClient.from('rsvps').insert([{
+        nome: payload.nome,
+        email: payload.email,
+        telefone: payload.telefone || null,
+        presenca: payload.presenca,
+        adultos: payload.adultos,
+        criancas: payload.criancas,
+        observacoes: payload.observacoes || null
+      }]).then(function(result) {
+        if (rsvpHint) rsvpHint.classList.remove('visible');
+        if (result.error) {
+          onRsvpFail(getSupabaseErrorMessage(result.error));
         } else {
-          if (rsvpError) {
-            rsvpError.textContent = getFormspreeErrorMessage(result);
-            rsvpError.classList.add('visible');
-          }
-          rsvpSubmit.disabled = false;
-          rsvpSubmit.textContent = 'Confirmar presença';
+          showRsvpSuccess(presenca);
         }
-      }).catch(function() {
-        if (rsvpError) {
-          rsvpError.textContent = 'Erro de conexão. Verifique sua internet e tente novamente.';
-          rsvpError.classList.add('visible');
-        }
-        rsvpSubmit.disabled = false;
-        rsvpSubmit.textContent = 'Confirmar presença';
       });
     });
   }
@@ -1837,51 +1950,53 @@
       msgSubmit.textContent = 'Enviando…';
       var msgHint = document.getElementById('msg-hint');
 
-      if (supabaseClient) {
-        supabaseClient.from('recados').insert([{
-          nome: payload.nome,
-          email: payload.email || null,
-          recado: payload.recado
-        }]).then(function(result) {
-          if (msgHint) msgHint.classList.remove('visible');
-          if (result.error) {
-            onMsgFail(getSupabaseErrorMessage(result.error));
-          } else {
-            onSuccess();
-          }
-        });
+      if (!supabaseClient) {
+        onMsgFail('Serviço temporariamente indisponível. Tente novamente mais tarde.');
         return;
       }
 
-      if (!isFormspreeConfigured(SITE_CONFIG.formspree.recados)) {
-        onSuccess();
-        return;
-      }
-
-      payload._subject = 'Recado — ' + name;
-      if (email) payload._replyto = email;
-
-      submitFormspreeWithFeedback(SITE_CONFIG.formspree.recados, payload, msgHint).then(function(result) {
-        if (result.ok) {
-          onSuccess();
+      supabaseClient.from('recados').insert([{
+        nome: payload.nome,
+        email: payload.email || null,
+        recado: payload.recado
+      }]).then(function(result) {
+        if (msgHint) msgHint.classList.remove('visible');
+        if (result.error) {
+          onMsgFail(getSupabaseErrorMessage(result.error));
         } else {
-          if (msgError) {
-            msgError.textContent = getFormspreeErrorMessage(result);
-            msgError.classList.add('visible');
-          }
-          msgSubmit.disabled = false;
-          msgSubmit.textContent = 'Enviar recado';
+          onSuccess();
         }
-      }).catch(function() {
-        if (msgError) {
-          msgError.textContent = 'Erro de conexão. Verifique sua internet e tente novamente.';
-          msgError.classList.add('visible');
-        }
-        msgSubmit.disabled = false;
-        msgSubmit.textContent = 'Enviar recado';
       });
     });
   }
+
+  /* ── Seletor de paleta (preview cliente) ── */
+  (function initThemeDemo() {
+    var THEMES = {
+      argila: { color: '#5E2C34' },
+      latte: { color: '#8B4A35' }
+    };
+    var saved = sessionStorage.getItem('wedding-theme-demo');
+    var theme = THEMES[saved] ? saved : 'argila';
+    document.documentElement.setAttribute('data-theme', theme);
+
+    var meta = document.getElementById('theme-color-meta');
+    if (meta) meta.setAttribute('content', THEMES[theme].color);
+
+    document.querySelectorAll('[data-theme-set]').forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-theme-set') === theme);
+      btn.addEventListener('click', function () {
+        var t = btn.getAttribute('data-theme-set');
+        if (!THEMES[t]) return;
+        document.documentElement.setAttribute('data-theme', t);
+        sessionStorage.setItem('wedding-theme-demo', t);
+        if (meta) meta.setAttribute('content', THEMES[t].color);
+        document.querySelectorAll('[data-theme-set]').forEach(function (b) {
+          b.classList.toggle('active', b.getAttribute('data-theme-set') === t);
+        });
+      });
+    });
+  })();
 </script>
 </body>
 </html>
