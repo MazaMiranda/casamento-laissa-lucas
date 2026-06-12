@@ -15,6 +15,8 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230d0d0d'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Georgia,serif' font-size='16' fill='%23c9a84c'%3EL%26amp%3BL%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://formspree.io" />
+  <link rel="preconnect" href="https://formspree.io" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -588,6 +590,13 @@
       margin-bottom: 1rem; line-height: 1.5;
     }
     .form-error.visible { display: block; }
+    .form-hint {
+      display: none; font-size: .72rem;
+      color: rgba(255,255,255,.4);
+      text-align: center; margin-top: .75rem; line-height: 1.5;
+    }
+    .form-hint.visible { display: block; }
+    .msg-form .form-hint { color: var(--muted); }
     .rsvp-success {
       display: none; text-align: center; padding: 3rem 1rem;
     }
@@ -1130,6 +1139,7 @@
               <textarea id="rsvp-obs" name="observacoes" placeholder="Restrição alimentar, recado..."></textarea>
             </div>
             <button type="submit" class="btn-rsvp" id="rsvp-submit">Confirmar presença</button>
+            <p class="form-hint" id="rsvp-hint"></p>
           </form>
           <div class="rsvp-success" id="rsvp-success">
             <div class="rsvp-check">✦</div>
@@ -1184,6 +1194,7 @@
           <textarea id="msg-text" name="recado" placeholder="Escreva uma mensagem carinhosa para o casal…" required></textarea>
         </div>
         <button type="submit" class="btn-msg" id="msg-submit">Enviar recado</button>
+        <p class="form-hint" id="msg-hint"></p>
       </form>
       <div class="msg-success" id="msg-success">
         <div class="rsvp-check" style="color:var(--gold);font-size:1.6rem">✦</div>
@@ -1267,15 +1278,49 @@
     return formId && formId.indexOf('SEU_FORM') === -1 && formId.length > 5;
   }
 
+  function getFormspreeErrorMessage(result) {
+    if (!result || !result.body) {
+      return 'Não foi possível enviar. Tente novamente ou entre em contato pelo WhatsApp.';
+    }
+    var body = result.body;
+    if (body.error && body.error.indexOf('reCAPTCHA') !== -1) {
+      return 'Formulário de presença bloqueado pelo Formspree (reCAPTCHA). Desative em formspree.io → formulário RSVP → Settings → Spam Protection.';
+    }
+    if (body.error) return body.error;
+    if (body.errors && body.errors.length) return body.errors[0].message || body.errors[0].code;
+    return 'Não foi possível enviar. Tente novamente ou entre em contato pelo WhatsApp.';
+  }
+
   function submitToFormspree(formId, data) {
     return fetch('https://formspree.io/f/' + formId, {
       method: 'POST',
+      keepalive: true,
       headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     }).then(function(response) {
       return response.json().then(function(body) {
-        return { ok: response.ok, body: body };
+        return { ok: response.ok, status: response.status, body: body };
+      }).catch(function() {
+        return { ok: false, status: response.status, body: null };
       });
+    });
+  }
+
+  function submitFormspreeWithFeedback(formId, data, hintEl) {
+    var slowTimer = setTimeout(function() {
+      if (hintEl) {
+        hintEl.textContent = 'Processando… o serviço pode levar alguns segundos na primeira vez.';
+        hintEl.classList.add('visible');
+      }
+    }, 2000);
+    return submitToFormspree(formId, data).then(function(result) {
+      clearTimeout(slowTimer);
+      if (hintEl) hintEl.classList.remove('visible');
+      return result;
+    }).catch(function(err) {
+      clearTimeout(slowTimer);
+      if (hintEl) hintEl.classList.remove('visible');
+      throw err;
     });
   }
 
@@ -1617,13 +1662,14 @@
 
       rsvpSubmit.disabled = true;
       rsvpSubmit.textContent = 'Enviando…';
+      var rsvpHint = document.getElementById('rsvp-hint');
 
-      submitToFormspree(SITE_CONFIG.formspree.rsvp, payload).then(function(result) {
+      submitFormspreeWithFeedback(SITE_CONFIG.formspree.rsvp, payload, rsvpHint).then(function(result) {
         if (result.ok) {
           showRsvpSuccess(presenca);
         } else {
           if (rsvpError) {
-            rsvpError.textContent = 'Não foi possível enviar. Tente novamente ou entre em contato pelo WhatsApp.';
+            rsvpError.textContent = getFormspreeErrorMessage(result);
             rsvpError.classList.add('visible');
           }
           rsvpSubmit.disabled = false;
@@ -1708,13 +1754,14 @@
 
       msgSubmit.disabled = true;
       msgSubmit.textContent = 'Enviando…';
+      var msgHint = document.getElementById('msg-hint');
 
-      submitToFormspree(SITE_CONFIG.formspree.recados, payload).then(function(result) {
+      submitFormspreeWithFeedback(SITE_CONFIG.formspree.recados, payload, msgHint).then(function(result) {
         if (result.ok) {
           onSuccess();
         } else {
           if (msgError) {
-            msgError.textContent = 'Não foi possível enviar o recado. Tente novamente.';
+            msgError.textContent = getFormspreeErrorMessage(result);
             msgError.classList.add('visible');
           }
           msgSubmit.disabled = false;
