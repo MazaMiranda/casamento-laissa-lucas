@@ -18,12 +18,12 @@
   <meta property="og:description" content="Estamos montando nosso lar juntos! Venha celebrar conosco. Confirme sua presença e veja todos os detalhes do chá." />
   <meta property="og:image" content="https://images.unsplash.com/photo-1560448204-e86f06249a78?w=1200&q=80" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230d0d0d'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Georgia,serif' font-size='16' fill='%23c9a84c'%3EL%26amp%3BL%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%235E2C34'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Georgia,serif' font-size='15' font-style='italic' fill='%23B8755F'%3EL%26amp%3BL%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="dns-prefetch" href="https://ysgxlwxwjwtcpyevkvcs.supabase.co" />
   <link rel="preconnect" href="https://ysgxlwxwjwtcpyevkvcs.supabase.co" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
  
@@ -74,16 +74,30 @@
       --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
       --dur-soft: 0.55s;
       --dur-reveal: 1.2s;
+      /* Tipografia */
+      --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
+      --font-body: 'Source Sans 3', system-ui, -apple-system, sans-serif;
+      --text-base: 1.0625rem;
+      --text-sm: 0.9375rem;
+      --leading-body: 1.75;
+      --leading-tight: 1.2;
+      --tracking-label: 0.12em;
+      --tracking-wide: 0.18em;
     }
  
     body {
-      font-family: 'Montserrat', sans-serif;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
       background: var(--white);
       color: var(--dark);
-      font-weight: 300;
+      font-weight: 400;
+      line-height: var(--leading-body);
       overflow-x: hidden;
       -webkit-text-size-adjust: 100%;
       -webkit-tap-highlight-color: rgba(var(--accent-rgb), 0.12);
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
  
     /* ─── NAV ─── */
@@ -100,18 +114,19 @@
       padding: 1rem 2rem;
     }
     .nav-brand {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem; font-style: italic;
-      color: var(--gold); letter-spacing: .04em;
+      font-family: var(--font-display);
+      font-size: 1.2rem; font-weight: 500; font-style: italic;
+      color: var(--gold); letter-spacing: 0.02em;
       text-decoration: none;
     }
     nav ul {
       display: flex; gap: 2.2rem; list-style: none;
     }
     nav a {
-      font-size: .65rem; font-weight: 500;
-      letter-spacing: .2em; text-transform: uppercase;
-      text-decoration: none; color: rgba(255,255,255,.6);
+      font-family: var(--font-body);
+      font-size: 0.6875rem; font-weight: 600;
+      letter-spacing: var(--tracking-label); text-transform: uppercase;
+      text-decoration: none; color: rgba(255,255,255,.65);
       transition: color var(--dur-soft) var(--ease-soft);
     }
     nav a:hover { color: var(--gold); }
@@ -221,26 +236,29 @@
     }
  
     .hero-date {
-      font-size: .62rem; font-weight: 500;
-      letter-spacing: .4em; text-transform: uppercase;
+      font-family: var(--font-body);
+      font-size: 0.6875rem; font-weight: 600;
+      letter-spacing: var(--tracking-wide); text-transform: uppercase;
       color: var(--gold); margin-bottom: 2.5rem;
     }
  
     .hero-title {
-      font-family: 'Playfair Display', serif;
+      font-family: var(--font-display);
       font-size: clamp(3.8rem, 10vw, 8.5rem);
-      font-weight: 400; line-height: .95;
+      font-weight: 500; line-height: 0.95;
       color: var(--white);
+      letter-spacing: -0.01em;
+      font-feature-settings: 'liga' 1, 'kern' 1;
     }
     .hero-title em {
       font-style: italic; color: var(--gold);
-      display: block;
+      display: block; font-weight: 500;
     }
     .hero-ampersand {
       display: block;
-      font-family: 'Playfair Display', serif;
-      font-style: italic; font-size: .45em;
-      color: rgba(var(--accent-rgb), .6);
+      font-family: var(--font-display);
+      font-style: italic; font-size: .45em; font-weight: 400;
+      color: rgba(var(--accent-rgb), .65);
       margin: .3em 0;
     }
  
@@ -254,8 +272,10 @@
     .hero-divider-icon { color: var(--gold); font-size: 1rem; }
  
     .hero-sub {
-      font-size: .72rem; font-weight: 400; letter-spacing: .18em;
-      text-transform: uppercase; color: rgba(255,255,255,.4);
+      font-family: var(--font-body);
+      font-size: 0.8125rem; font-weight: 400;
+      letter-spacing: var(--tracking-label); text-transform: uppercase;
+      color: rgba(255,255,255,.5);
     }
  
     /* countdown */
@@ -269,12 +289,14 @@
     }
     .cd-item:last-child { border-right: none; }
     .cd-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem; font-weight: 400;
+      font-family: var(--font-display);
+      font-size: 2.5rem; font-weight: 500;
       color: var(--white); line-height: 1; display: block;
     }
     .cd-label {
-      font-size: .55rem; letter-spacing: .22em;
+      font-family: var(--font-body);
+      font-size: 0.625rem; font-weight: 600;
+      letter-spacing: var(--tracking-label);
       text-transform: uppercase; color: var(--gold);
       margin-top: .4rem; display: block;
     }
@@ -288,8 +310,10 @@
       animation: fadeInSoft 1.8s var(--ease-out-soft) 1.1s both;
     }
     .scroll-hint span {
-      font-size: .55rem; letter-spacing: .25em; text-transform: uppercase;
-      color: rgba(255,255,255,.25);
+      font-family: var(--font-body);
+      font-size: 0.625rem; font-weight: 500;
+      letter-spacing: var(--tracking-label); text-transform: uppercase;
+      color: rgba(255,255,255,.35);
     }
     .scroll-line {
       width: 1px; height: 40px;
@@ -307,17 +331,20 @@
     .section-inner { max-width: 1000px; margin: 0 auto; }
  
     .section-tag {
-      font-size: .6rem; font-weight: 600;
-      letter-spacing: .35em; text-transform: uppercase;
+      font-family: var(--font-body);
+      font-size: 0.6875rem; font-weight: 600;
+      letter-spacing: var(--tracking-wide); text-transform: uppercase;
       color: var(--gold); display: block; margin-bottom: 1rem;
     }
     .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 400; color: var(--black); line-height: 1.15;
+      font-family: var(--font-display);
+      font-size: clamp(2.1rem, 5vw, 3.4rem);
+      font-weight: 500; color: var(--black);
+      line-height: var(--leading-tight);
       margin-bottom: 1rem;
+      letter-spacing: -0.015em;
     }
-    .section-title em { font-style: italic; color: var(--gold); }
+    .section-title em { font-style: italic; color: var(--gold); font-weight: 500; }
     .section-title.light { color: var(--white); }
     .section-title.light em { color: var(--gold-lt); }
  
@@ -334,8 +361,8 @@
     }
  
     .body-text {
-      font-size: .9rem; line-height: 1.95;
-      color: var(--muted); max-width: 580px;
+      font-size: var(--text-sm); line-height: 1.85;
+      color: var(--muted); max-width: 36rem;
     }
     .body-text.light { color: rgba(255,255,255,.55); }
  
@@ -375,13 +402,14 @@
       margin-bottom: 1.5rem; display: block;
     }
     .welcome-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
-      font-weight: 400; color: var(--black);
-      line-height: 1.35; margin-bottom: 2rem;
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 4vw, 2.35rem);
+      font-weight: 500; color: var(--black);
+      line-height: 1.3; margin-bottom: 2rem;
+      letter-spacing: -0.01em;
     }
     .welcome-text {
-      font-size: .9rem; line-height: 2;
+      font-size: var(--text-sm); line-height: 1.85;
       color: var(--muted); text-align: left;
     }
     .welcome-text + .welcome-text { margin-top: 1.2rem; }
@@ -390,8 +418,9 @@
       justify-content: center; margin-top: 2.5rem;
     }
     .welcome-link {
-      font-size: .58rem; font-weight: 600;
-      letter-spacing: .18em; text-transform: uppercase;
+      font-family: var(--font-body);
+      font-size: 0.6875rem; font-weight: 600;
+      letter-spacing: var(--tracking-label); text-transform: uppercase;
       text-decoration: none; color: var(--gold-dim);
       border: 1px solid var(--border);
       padding: .65rem 1.2rem;
@@ -489,13 +518,13 @@
     }
     .info-icon { font-size: 1.5rem; margin-bottom: .8rem; }
     .info-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem; font-weight: 400;
+      font-family: var(--font-display);
+      font-size: 1.15rem; font-weight: 500;
       color: var(--white); margin-bottom: .6rem;
     }
     .info-card p {
-      font-size: .82rem; line-height: 1.75;
-      color: rgba(255,255,255,.45);
+      font-size: var(--text-sm); line-height: 1.75;
+      color: rgba(255,255,255,.5);
     }
  
     /* ─── CEREMONY ─── */
@@ -505,11 +534,13 @@
     }
     .ceremony-block { margin-bottom: 2rem; }
     .ceremony-block-label {
-      font-size: .58rem; letter-spacing: .3em; text-transform: uppercase;
+      font-family: var(--font-body);
+      font-size: 0.6875rem; font-weight: 600;
+      letter-spacing: var(--tracking-wide); text-transform: uppercase;
       color: var(--gold); margin-bottom: .5rem;
     }
     .ceremony-block p {
-      font-size: .92rem; color: var(--muted); line-height: 1.8;
+      font-size: var(--text-sm); color: rgba(255,255,255,.55); line-height: 1.8;
     }
     .ceremony-block strong { color: var(--white); font-weight: 500; }
     .map-box {
@@ -570,12 +601,13 @@
     }
     .gift-body { padding: 1.6rem; flex: 1; }
     .gift-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; color: var(--dark);
+      font-family: var(--font-display);
+      font-size: 1.25rem; font-weight: 500;
+      color: var(--dark);
       margin-bottom: .5rem; line-height: 1.3;
     }
     .gift-desc {
-      font-size: .82rem; line-height: 1.75;
+      font-size: var(--text-sm); line-height: 1.75;
       color: var(--muted);
     }
     .gift-footer {
@@ -584,12 +616,14 @@
       display: flex; align-items: center; justify-content: space-between;
     }
     .gift-price {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.45rem; color: var(--dark); line-height: 1;
+      font-family: var(--font-display);
+      font-size: 1.5rem; font-weight: 500;
+      color: var(--dark); line-height: 1;
     }
     .gift-price small {
-      font-family: 'Montserrat', sans-serif;
-      font-size: .58rem; letter-spacing: .15em;
+      font-family: var(--font-body);
+      font-size: 0.625rem; font-weight: 600;
+      letter-spacing: var(--tracking-label);
       text-transform: uppercase; color: var(--muted);
       display: block; margin-bottom: .15rem;
     }
@@ -597,8 +631,9 @@
       display: inline-block;
       background: var(--gold); color: var(--on-accent);
       text-decoration: none; padding: .65rem 1.3rem;
-      font-size: .62rem; font-weight: 600;
-      letter-spacing: .18em; text-transform: uppercase;
+      font-family: var(--font-body);
+      font-size: 0.6875rem; font-weight: 600;
+      letter-spacing: var(--tracking-label); text-transform: uppercase;
       transition: background .25s, color .25s;
       white-space: nowrap;
     }
@@ -630,9 +665,9 @@
     }
     .form-row { margin-bottom: 1.4rem; }
     .form-row label {
-      display: block; font-size: .58rem;
-      letter-spacing: .2em; text-transform: uppercase;
-      color: rgba(255,255,255,.35); margin-bottom: .5rem;
+      display: block; font-size: 0.6875rem; font-weight: 600;
+      letter-spacing: var(--tracking-label); text-transform: uppercase;
+      color: rgba(255,255,255,.45); margin-bottom: .5rem;
     }
     .form-row input, .form-row select, .form-row textarea {
       width: 100%;
@@ -640,7 +675,7 @@
       border: 1px solid rgba(var(--accent-rgb), .2);
       color: var(--white);
       padding: .85rem 1rem;
-      font-family: 'Montserrat', sans-serif;
+      font-family: var(--font-body);
       font-size: max(16px, .88rem);
       font-weight: 300;
       outline: none;
@@ -655,9 +690,9 @@
     .btn-rsvp {
       width: 100%; background: var(--gold); color: var(--on-accent);
       border: none; padding: 1rem;
-      font-family: 'Montserrat', sans-serif;
-      font-size: max(16px, .65rem); font-weight: 600;
-      letter-spacing: .25em; text-transform: uppercase;
+      font-family: var(--font-body);
+      font-size: max(16px, 0.6875rem); font-weight: 600;
+      letter-spacing: var(--tracking-wide); text-transform: uppercase;
       cursor: pointer;
       transition: background var(--dur-soft) var(--ease-soft);
       touch-action: manipulation;
@@ -683,8 +718,8 @@
       font-size: 2rem; color: var(--gold); margin-bottom: 1rem;
     }
     .rsvp-success h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem; font-style: italic;
+      font-family: var(--font-display);
+      font-size: 1.65rem; font-style: italic; font-weight: 500;
       color: var(--white); margin-bottom: .5rem;
     }
     .rsvp-success p { color: rgba(255,255,255,.4); font-size: .85rem; }
@@ -703,7 +738,7 @@
       flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%;
       border: 1px solid var(--gold);
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Playfair Display', serif;
+      font-family: var(--font-display);
       font-size: 1.1rem; color: var(--gold);
     }
     .msg-name { font-size: .75rem; font-weight: 600; color: var(--dark); margin-bottom: .4rem; }
@@ -721,9 +756,9 @@
     .btn-msg {
       background: transparent; border: 1px solid var(--gold); color: var(--gold);
       padding: .85rem 2.2rem; cursor: pointer;
-      font-family: 'Montserrat', sans-serif;
-      font-size: max(16px, .63rem); font-weight: 600;
-      letter-spacing: .2em; text-transform: uppercase;
+      font-family: var(--font-body);
+      font-size: max(16px, 0.6875rem); font-weight: 600;
+      letter-spacing: var(--tracking-wide); text-transform: uppercase;
       transition: background var(--dur-soft) var(--ease-soft), color var(--dur-soft) var(--ease-soft);
       touch-action: manipulation;
     }
@@ -743,13 +778,14 @@
     }
     .btn-action {
       display: inline-flex; align-items: center; gap: .45rem;
-      font-size: .58rem; font-weight: 600;
-      letter-spacing: .16em; text-transform: uppercase;
+      font-family: var(--font-body);
+      font-size: 0.6875rem; font-weight: 600;
+      letter-spacing: var(--tracking-label); text-transform: uppercase;
       text-decoration: none; cursor: pointer;
       padding: .7rem 1.2rem;
       border: 1px solid rgba(var(--accent-rgb), .35);
       background: transparent; color: var(--gold);
-      font-family: 'Montserrat', sans-serif;
+      font-family: var(--font-body);
       transition: background .25s, color .25s, border-color .25s;
     }
     .btn-action:hover {
@@ -776,19 +812,22 @@
       text-align: center; padding: 5rem 2rem 3rem;
     }
     .footer-monogram {
-      font-family: 'Playfair Display', serif;
-      font-size: 4rem; font-style: italic;
+      font-family: var(--font-display);
+      font-size: 4rem; font-style: italic; font-weight: 500;
       color: var(--gold); line-height: 1;
       margin-bottom: 1.5rem; letter-spacing: -.02em;
     }
     .footer-names {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem; color: var(--white);
+      font-family: var(--font-display);
+      font-size: 1.65rem; font-weight: 500;
+      color: var(--white);
       font-style: italic; margin-bottom: .8rem;
     }
     footer small {
-      font-size: .62rem; letter-spacing: .28em;
-      text-transform: uppercase; color: rgba(255,255,255,.25);
+      font-family: var(--font-body);
+      font-size: 0.6875rem; font-weight: 500;
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase; color: rgba(255,255,255,.35);
     }
     .footer-line {
       width: 60px; height: 1px; background: rgba(var(--accent-rgb), .3);
@@ -1013,7 +1052,7 @@
       box-shadow: 0 8px 32px rgba(0,0,0,.14);
       padding: .9rem 1rem;
       max-width: 260px;
-      font-family: 'Montserrat', sans-serif;
+      font-family: var(--font-body);
     }
     .theme-demo-label {
       font-size: .52rem;
@@ -1897,7 +1936,7 @@
       if (countdownInterval) clearInterval(countdownInterval);
       var box = document.querySelector('.countdown');
       if (box) {
-        box.innerHTML = '<p style="font-family:\'Playfair Display\',serif;font-size:1.4rem;font-style:italic;color:var(--gold);padding:1.5rem 2rem">Hoje é o nosso chá de casa nova! ♥</p>';
+        box.innerHTML = '<p style="font-family:var(--font-display);font-size:1.4rem;font-style:italic;font-weight:500;color:var(--gold);padding:1.5rem 2rem">Hoje é o nosso chá de casa nova! ♥</p>';
       }
       return;
     }
