@@ -257,6 +257,9 @@
       background: var(--band);
       padding: 3.5rem 2rem;
       text-align: center;
+      position: relative;
+      z-index: 0;
+      overflow: hidden;
     }
     .countdown-band-title {
       font-family: var(--font-display);
@@ -376,11 +379,14 @@
       text-align: center;
       padding: 5rem 2rem;
       background: var(--white);
+      position: relative;
+      z-index: 1;
+      isolation: isolate;
     }
     .welcome-inner {
       max-width: 680px; margin: 0 auto;
       padding: 0;
-      background: transparent;
+      background: var(--white);
       border: none;
       border-radius: 0;
       box-shadow: none;
@@ -921,6 +927,7 @@
     .reveal.visible {
       opacity: 1;
       transform: none;
+      will-change: auto;
     }
     .reveal-delay-1 { transition-delay: 0.12s; }
     .reveal-delay-2 { transition-delay: 0.24s; }
@@ -949,11 +956,22 @@
         --leading-body: 1.75;
       }
 
+      /* iOS Safari: reveal com opacity causa texto fantasma sobre seções escuras */
+      .reveal,
+      .reveal.visible {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        will-change: auto;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+
       section {
         padding: 3.5rem max(1rem, env(safe-area-inset-left, 0px));
         padding-right: max(1rem, env(safe-area-inset-right, 0px));
       }
-      .welcome-section { padding: 3.5rem max(1rem, env(safe-area-inset-left, 0px)); padding-right: max(1rem, env(safe-area-inset-right, 0px)); }
+      .welcome-section { padding: 3.5rem max(1rem, env(safe-area-inset-left, 0px)); padding-right: max(1rem, env(safe-area-inset-right, 0px)); padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px)); }
       .countdown-band {
         padding: 2.5rem max(1rem, env(safe-area-inset-left, 0px));
         padding-right: max(1rem, env(safe-area-inset-right, 0px));
@@ -1040,7 +1058,11 @@
       }
       .section-tag { letter-spacing: 0.1em; }
       .body-text { max-width: none; padding: 0 .15rem; }
-      .welcome-title { font-size: clamp(1.25rem, 5vw, 1.65rem); }
+      .welcome-title {
+        font-size: clamp(1.25rem, 5vw, 1.65rem);
+        letter-spacing: 0.02em;
+        -webkit-font-smoothing: antialiased;
+      }
       .welcome-links { flex-direction: column; align-items: stretch; gap: .55rem; }
       .welcome-link { text-align: center; min-height: 44px; display: flex; align-items: center; justify-content: center; }
 
@@ -1822,9 +1844,12 @@
   if ('IntersectionObserver' in window) {
     revealObserver = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
-        if (e.isIntersecting) e.target.classList.add('visible');
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          e.target.style.willChange = 'auto';
+        }
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -4% 0px' });
     document.querySelectorAll('.reveal').forEach(function(el) {
       revealObserver.observe(el);
     });
