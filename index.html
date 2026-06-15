@@ -80,7 +80,8 @@
       color: var(--dark);
       font-weight: 400;
       line-height: var(--leading-body);
-      overflow-x: hidden;
+      overflow-x: clip;
+      max-width: 100%;
       -webkit-text-size-adjust: 100%;
       -webkit-tap-highlight-color: rgba(var(--accent-rgb), 0.12);
       text-rendering: optimizeLegibility;
@@ -91,6 +92,8 @@
     /* ─── NAV (estilo Casar — clara) ─── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      width: 100%;
+      max-width: 100%;
       background: rgba(255, 255, 255, .97);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
@@ -142,26 +145,44 @@
     .nav-toggle.open span:nth-child(2) { opacity: 0; }
     .nav-toggle.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
-    @media (max-width: 768px) {
-      .nav-inner { padding: .75rem 1.25rem; justify-content: flex-start; }
-      .nav-brand { position: static; }
-      .nav-toggle { display: flex; }
+    @media (max-width: 992px) {
+      .nav-inner {
+        position: relative;
+        width: 100%;
+        justify-content: space-between;
+        padding: .75rem 1rem;
+        padding-left: max(1rem, env(safe-area-inset-left, 0px));
+        padding-right: max(1rem, env(safe-area-inset-right, 0px));
+      }
+      .nav-brand { position: static; flex-shrink: 0; }
+      .nav-toggle { display: flex; z-index: 2; }
       nav ul {
         display: none; flex-direction: column; gap: 0;
         position: absolute; top: 100%; left: 0; right: 0;
         background: var(--white);
         border-top: 1px solid var(--border);
-        padding: .5rem 0 1rem;
-        max-height: calc(100dvh - 4rem);
+        padding: .5rem 0 calc(1rem + env(safe-area-inset-bottom, 0px));
+        max-height: calc(100dvh - 3.5rem);
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        box-shadow: var(--shadow-md);
       }
       nav ul.open { display: flex; }
       nav ul li a {
         display: block;
-        padding: .95rem 1.5rem;
+        padding: .95rem 1.25rem;
         font-size: var(--text-xs);
       }
+    }
+
+    @media (min-width: 993px) {
+      .nav-toggle { display: none !important; }
+    }
+
+    @media (min-width: 993px) and (max-width: 1100px) {
+      nav ul { gap: 1.1rem; }
+      nav a { font-size: 0.75rem; letter-spacing: 0.06em; }
+      .nav-brand { left: 1.25rem; font-size: 1.05rem; }
     }
  
     /* ─── HERO (estilo Casar — claro) ─── */
@@ -189,6 +210,8 @@
       color: var(--dark);
       line-height: 1.15;
       margin-bottom: 2.5rem;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
     }
     .hero-title-casar .hero-plus {
       display: inline-block;
@@ -546,7 +569,7 @@
     }
     .gifts-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
       gap: 2rem;
       background: transparent;
       border: none;
@@ -920,110 +943,205 @@
  
     /* ─── RESPONSIVE ─── */
     @media (max-width: 768px) {
-      section { padding: 4rem 1.25rem; }
-      .welcome-section { padding: 4rem 1.25rem; }
-      .countdown-band { padding: 3rem 1.25rem; }
-      .section-inner { width: 100%; }
+      html {
+        --text-base: 1rem;
+        --text-sm: 0.9375rem;
+        --leading-body: 1.75;
+      }
+
+      section {
+        padding: 3.5rem max(1rem, env(safe-area-inset-left, 0px));
+        padding-right: max(1rem, env(safe-area-inset-right, 0px));
+      }
+      .welcome-section { padding: 3.5rem max(1rem, env(safe-area-inset-left, 0px)); padding-right: max(1rem, env(safe-area-inset-right, 0px)); }
+      .countdown-band {
+        padding: 2.5rem max(1rem, env(safe-area-inset-left, 0px));
+        padding-right: max(1rem, env(safe-area-inset-right, 0px));
+      }
+      .section-inner,
+      .section-inner-wide,
+      .hero-casar-inner,
+      .welcome-inner,
+      .rsvp-container,
+      .msg-form,
+      .rsvp-form-wrap {
+        width: 100%;
+        max-width: 100%;
+      }
 
       /* Hero */
       #home {
-        padding: calc(5.5rem + env(safe-area-inset-top, 0px)) 1.25rem 2.5rem;
+        padding: calc(4.75rem + env(safe-area-inset-top, 0px)) max(1rem, env(safe-area-inset-left, 0px)) 2rem;
+        padding-right: max(1rem, env(safe-area-inset-right, 0px));
       }
       .hero-photos-row {
-        grid-template-columns: repeat(3, 1fr);
-        gap: .5rem;
-      }
-      .hero-title-casar { font-size: clamp(1.75rem, 8vw, 2.5rem); margin-bottom: 1.5rem; }
-      .event-actions {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: .45rem;
         width: 100%;
-        max-width: 18rem;
-        margin: 0 auto;
-        gap: .6rem;
       }
-      .countdown {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
+      .hero-title-casar {
+        font-size: clamp(1.5rem, 7.5vw, 2.1rem);
+        letter-spacing: 0.04em;
+        margin-bottom: 1.25rem;
+      }
+      .hero-date-line { font-size: var(--text-xs); letter-spacing: 0.08em; }
+      .hero-sub-casar { margin-bottom: 1.5rem; line-height: 1.5; }
+
+      .event-actions,
+      .ceremony-layout .event-actions {
         width: 100%;
-        max-width: 18rem;
-        margin: 0 auto;
-        gap: .5rem;
+        max-width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: .55rem;
       }
-      .cd-item {
-        padding: .9rem .5rem;
-        min-width: 0;
-      }
-      .cd-num { font-size: 1.75rem; }
       .event-actions .btn-action {
-        flex: 1 1 calc(50% - .3rem);
+        width: 100%;
+        flex: 1 1 auto;
         justify-content: center;
         min-height: 44px;
-        padding: .75rem .6rem;
+        padding: .75rem 1rem;
         font-size: var(--text-xs);
       }
 
+      .countdown {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        max-width: 100%;
+        gap: .45rem;
+      }
+      .cd-item {
+        padding: .85rem .4rem;
+        min-width: 0;
+      }
+      .cd-num { font-size: 1.65rem; }
+      .cd-label { font-size: 0.7rem; letter-spacing: 0.06em; }
+      .countdown-band-title {
+        font-size: clamp(1.15rem, 4.5vw, 1.5rem);
+        letter-spacing: 0.05em;
+        margin-bottom: 1.5rem;
+        padding: 0 .5rem;
+      }
+      .countdown-done-msg {
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        font-weight: 500;
+        color: var(--white);
+        padding: .75rem 1rem;
+        line-height: 1.5;
+      }
+
       /* Conteúdo */
-      .section-title { font-size: clamp(1.75rem, 7vw, 2.4rem); }
-      .body-text { max-width: none; }
-      .welcome-title { font-size: clamp(1.45rem, 5.5vw, 1.85rem); }
-      .welcome-links { flex-direction: column; align-items: stretch; }
+      .section-title {
+        font-size: clamp(1.35rem, 5.5vw, 1.85rem);
+        letter-spacing: 0.03em;
+        overflow-wrap: break-word;
+      }
+      .section-tag { letter-spacing: 0.1em; }
+      .body-text { max-width: none; padding: 0 .15rem; }
+      .welcome-title { font-size: clamp(1.25rem, 5vw, 1.65rem); }
+      .welcome-links { flex-direction: column; align-items: stretch; gap: .55rem; }
       .welcome-link { text-align: center; min-height: 44px; display: flex; align-items: center; justify-content: center; }
 
-      .gallery-grid { grid-template-columns: 1fr 1fr; gap: .5rem; }
-      .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 1; aspect-ratio: 16/10; }
+      .gallery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .45rem;
+        width: 100%;
+      }
+      .gallery-item:nth-child(1) {
+        grid-column: span 2;
+        grid-row: span 1;
+        aspect-ratio: 16/10;
+        min-height: 0;
+      }
+      .gallery-item { min-width: 0; }
 
-      .story-layout { grid-template-columns: 1fr; gap: 2.5rem; }
-      .story-photos { gap: .75rem; }
-      .photo-slot:nth-child(2) { margin-top: 1.5rem; }
+      .story-layout { grid-template-columns: 1fr; gap: 2rem; }
+      .story-photos {
+        grid-template-columns: 1fr;
+        gap: .75rem;
+        max-width: 340px;
+        margin: 0 auto;
+        width: 100%;
+      }
+      .photo-slot:nth-child(2) { margin-top: 0; }
+      .photo-slot { min-width: 0; }
 
-      .ceremony-layout { grid-template-columns: 1fr; gap: 2rem; }
-      .map-box { height: 220px; }
-      .info-grid { grid-template-columns: 1fr; }
+      .ceremony-layout { grid-template-columns: 1fr; gap: 1.75rem; margin-top: 2rem; }
+      .ceremony-block { margin-bottom: 1.5rem; }
+      .map-box { height: 220px; width: 100%; }
+      .info-grid { grid-template-columns: 1fr; margin-top: 2.5rem; }
+      .info-card { padding: 1.5rem 1.25rem; }
 
       .gifts-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+      .gift-body { padding: 1.25rem; }
       .gift-footer {
-        flex-wrap: wrap;
-        gap: .85rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: .75rem;
+        padding: 1rem 1.25rem;
       }
-      .btn-presentear { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+      .btn-presentear {
+        width: 100%;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .gift-name { font-size: 1.15rem; }
 
-      .rsvp-container { grid-template-columns: 1fr; gap: 2rem; }
-      .rsvp-form-wrap { padding: 1.5rem 1.25rem; }
+      .rsvp-container { margin-top: 1.5rem; }
+      .rsvp-form-wrap { padding: 1.25rem 1rem; }
+      .rsvp-info { margin-bottom: 1.25rem; }
       .btn-rsvp { min-height: 48px; }
+      .form-row input,
+      .form-row select,
+      .form-row textarea { max-width: 100%; }
 
-      .messages-grid { grid-template-columns: 1fr; }
-      .msg-form { margin-top: 2.5rem; padding: 1.5rem 1.25rem; }
+      .messages-grid { grid-template-columns: 1fr; gap: .75rem; }
+      .msg-card { padding: 1.25rem; min-width: 0; }
+      .msg-form { margin-top: 2rem; padding: 1.25rem 1rem; }
       .btn-msg { width: 100%; min-height: 48px; }
 
       footer {
-        padding: 4rem 1.25rem calc(3rem + env(safe-area-inset-bottom, 0px));
+        padding: 3rem max(1rem, env(safe-area-inset-left, 0px)) calc(2.5rem + env(safe-area-inset-bottom, 0px));
+        padding-right: max(1rem, env(safe-area-inset-right, 0px));
       }
-      .footer-monogram { font-size: 3rem; }
+      .footer-monogram { font-size: 2.5rem; }
+      .footer-names { font-size: 1.2rem; }
 
       /* Lightbox */
       .lightbox { padding: 1rem; padding-top: calc(1rem + env(safe-area-inset-top, 0px)); }
       .lightbox-close {
         top: calc(.75rem + env(safe-area-inset-top, 0px));
-        right: .75rem;
+        right: max(.75rem, env(safe-area-inset-right, 0px));
         min-width: 44px; min-height: 44px;
         display: flex; align-items: center; justify-content: center;
       }
       .lightbox-nav { display: none; }
-      .lightbox img { max-height: 70vh; }
+      .lightbox img { max-height: 70vh; max-width: 92vw; }
     }
 
     @media (max-width: 480px) {
-      section { padding: 4rem 1rem; }
-      .welcome-section { padding: 4rem 1rem; }
-      #home { padding-left: 1rem; padding-right: 1rem; }
-      .hero-title-casar { font-size: clamp(1.5rem, 9vw, 2rem); }
-      .event-actions { max-width: 100%; }
-      .event-actions .btn-action { flex: 1 1 100%; }
-      .gift-footer {
-        flex-direction: column;
-        align-items: stretch;
+      section { padding-top: 3rem; padding-bottom: 3rem; }
+      .welcome-section { padding-top: 3rem; padding-bottom: 3rem; }
+      #home { padding-bottom: 1.75rem; }
+      .hero-title-casar { font-size: clamp(1.35rem, 8.5vw, 1.75rem); }
+      .hero-photos-row {
+        grid-template-columns: 1fr;
+        max-width: 260px;
+        margin-left: auto;
+        margin-right: auto;
       }
-      .btn-presentear { width: 100%; }
-      .msg-card { padding: 1.25rem; }
+      .hero-photo { aspect-ratio: 4/3; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-item:nth-child(1) {
+        grid-column: span 1;
+        aspect-ratio: 16/10;
+      }
+      .msg-card { flex-direction: column; align-items: flex-start; }
     }
 
   </style>
@@ -1833,7 +1951,7 @@
       if (countdownInterval) clearInterval(countdownInterval);
       var box = document.querySelector('.countdown');
       if (box) {
-        box.innerHTML = '<p style="font-family:var(--font-display);font-size:1.2rem;font-weight:500;color:var(--white);padding:1rem 2rem;width:100%">Hoje é o nosso chá de casa nova! ♥</p>';
+        box.innerHTML = '<p class="countdown-done-msg">Hoje é o nosso chá de casa nova! ♥</p>';
       }
       return;
     }
@@ -1878,7 +1996,7 @@
       if (e.key === 'Escape') setNavOpen(false);
     });
     window.addEventListener('resize', function() {
-      if (window.innerWidth > 768) setNavOpen(false);
+      if (window.innerWidth > 992) setNavOpen(false);
     });
   }
  
